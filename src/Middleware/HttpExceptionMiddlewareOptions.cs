@@ -1,4 +1,4 @@
-﻿namespace Revolex.AspNetCore.Middleware
+﻿namespace Delobytes.AspNetCore.Middleware
 {
     /// <summary>
     /// Options to control <see cref="HttpExceptionMiddleware"/>.

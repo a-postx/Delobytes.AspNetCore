@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Revolex.AspNetCore
+namespace Delobytes.AspNetCore
 {
     /// <summary>
     /// Execute single command and return result.

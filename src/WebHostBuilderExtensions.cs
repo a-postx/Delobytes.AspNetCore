@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Hosting;
 
-namespace Revolex.AspNetCore
+namespace Delobytes.AspNetCore
 {
     /// <summary>
     /// <see cref="IWebHostBuilder"/> extension methods.

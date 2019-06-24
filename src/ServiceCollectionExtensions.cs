@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Revolex.AspNetCore
+namespace Delobytes.AspNetCore
 {
     /// <summary>
     /// <see cref="IServiceCollection"/> extension methods.

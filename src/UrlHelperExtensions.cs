@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Revolex.AspNetCore
+namespace Delobytes.AspNetCore
 {
     /// <summary>
     /// <see cref="IUrlHelper"/> extension methods.

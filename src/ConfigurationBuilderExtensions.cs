@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
 
-namespace Revolex.AspNetCore
+namespace Delobytes.AspNetCore
 {
     /// <summary>
     /// <see cref="IConfigurationBuilder"/> extension methods.

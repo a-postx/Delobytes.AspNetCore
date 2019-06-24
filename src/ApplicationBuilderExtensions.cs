@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Revolex.AspNetCore.Middleware;
+using Delobytes.AspNetCore.Middleware;
 
-namespace Revolex.AspNetCore
+namespace Delobytes.AspNetCore
 {
     /// <summary>
     /// <see cref="IApplicationBuilder"/> extension methods.

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace Revolex.AspNetCore.Middleware
+namespace Delobytes.AspNetCore.Middleware
 {
     internal class HttpExceptionMiddleware
     {

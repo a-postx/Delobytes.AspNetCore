@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace Revolex.AspNetCore
+namespace Delobytes.AspNetCore
 {
     /// <summary>
     /// Describes exception that occurred during processing of HTTP requests.

@@ -1,4 +1,4 @@
-﻿namespace Revolex.AspNetCore
+﻿namespace Delobytes.AspNetCore
 {
     /// <summary>
     /// A list of internet media types used on the Internet to indicate file data types.

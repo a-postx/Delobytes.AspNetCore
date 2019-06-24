@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace Revolex.AspNetCore.Middleware
+namespace Delobytes.AspNetCore.Middleware
 {
     internal class InternalServerErrorExceptionMiddleware : IMiddleware
     {

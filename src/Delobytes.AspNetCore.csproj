@@ -6,6 +6,7 @@
     <Authors>Alexey Yakubin</Authors>
     <Company>Delobytes</Company>
     <Description>Middlewares, MVC filters, extension methods and helper code for ASP.NET Core projects.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
