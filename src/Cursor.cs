@@ -88,6 +88,11 @@ namespace Delobytes.AspNetCore
                 throw new ArgumentNullException(nameof(value));
             }
 
+            if (value is DateTime dateTime)
+            {
+                return Base64Encode(dateTime.ToString("o", CultureInfo.InvariantCulture));
+            }
+
             if (value is DateTimeOffset dateTimeOffset)
             {
                 return Base64Encode(dateTimeOffset.ToString("o", CultureInfo.InvariantCulture));
