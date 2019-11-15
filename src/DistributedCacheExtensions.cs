@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Delobytes.AspNetCore.Caching
+namespace Delobytes.AspNetCore
 {
     /// <summary>
     /// <see cref="IDistributedCache"/> extension methods.

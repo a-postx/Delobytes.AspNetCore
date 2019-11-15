@@ -3,9 +3,6 @@ using System.Diagnostics;
 using System.Globalization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
 
 namespace Delobytes.AspNetCore
@@ -87,21 +84,6 @@ namespace Delobytes.AspNetCore
             }
 
             return context;
-        }
-
-        /// <summary>
-        /// Gets <see cref="IUrlHelper"/> instance. Use <see cref="IUrlHelperFactory"/> and
-        /// <see cref="IActionContextAccessor"/>.
-        /// </summary>
-        /// <param name="httpContext">HTTP context.</param>
-        /// <returns><see cref="IUrlHelper"/> instance for the current request.</returns>
-        public static IUrlHelper GetUrlHelper(this HttpContext httpContext)
-        {
-            IServiceProvider services = httpContext.RequestServices;
-            ActionContext actionContext = services.GetRequiredService<IActionContextAccessor>().ActionContext;
-            IUrlHelper urlHelper = services.GetRequiredService<IUrlHelperFactory>().GetUrlHelper(actionContext);
-
-            return urlHelper;
         }
     }
 }

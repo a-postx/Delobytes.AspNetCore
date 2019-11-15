@@ -6,37 +6,36 @@ using Microsoft.Extensions.Logging;
 
 namespace Delobytes.AspNetCore.Middleware
 {
-    internal class HttpExceptionMiddleware
+    internal class HttpExceptionMiddleware : IMiddleware
     {
-        private readonly RequestDelegate _next;
-        private readonly HttpExceptionMiddlewareOptions _options;
+        private readonly RequestDelegate next;
+        private readonly HttpExceptionMiddlewareOptions options;
 
         public HttpExceptionMiddleware(RequestDelegate next, HttpExceptionMiddlewareOptions options)
         {
-            _next = next;
-            _options = options;
+            this.next = next;
+            this.options = options;
         }
 
-        public async Task InvokeAsync(HttpContext context)
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             try
             {
-                await _next.Invoke(context).ConfigureAwait(false);
+                await this.next.Invoke(context).ConfigureAwait(false);
             }
             catch (HttpException httpException)
             {
-                ILoggerFactory factory = context.RequestServices.GetRequiredService<ILoggerFactory>();
-                ILogger<HttpExceptionMiddleware> logger = factory.CreateLogger<HttpExceptionMiddleware>();
+                var factory = context.RequestServices.GetRequiredService<ILoggerFactory>();
+                var logger = factory.CreateLogger<HttpExceptionMiddleware>();
                 logger.LogInformation(
                     httpException,
                     "Executing HttpExceptionMiddleware, setting HTTP status code {0}.",
                     httpException.StatusCode);
 
                 context.Response.StatusCode = httpException.StatusCode;
-
-                if (_options.IncludeReasonPhraseInResponse)
+                if (this.options.IncludeReasonPhraseInResponse)
                 {
-                    IHttpResponseFeature responseFeature = context.Features.Get<IHttpResponseFeature>();
+                    var responseFeature = context.Features.Get<IHttpResponseFeature>();
                     responseFeature.ReasonPhrase = httpException.Message;
                 }
             }
