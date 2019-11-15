@@ -226,20 +226,5 @@ namespace Delobytes.AspNetCore
                 };
             });
         }
-
-        /// <summary>
-        /// Returns 500 Internal Server Error response when an unhandled exception occurs.
-        /// </summary>
-        /// <param name="application">Application builder.</param>
-        /// <returns>The same application builder.</returns>
-        public static IApplicationBuilder UseInternalServerErrorOnException(this IApplicationBuilder application)
-        {
-            if (application == null)
-            {
-                throw new ArgumentNullException(nameof(application));
-            }
-
-            return application.UseMiddleware<InternalServerErrorExceptionMiddleware>();
-        }
     }
 }
