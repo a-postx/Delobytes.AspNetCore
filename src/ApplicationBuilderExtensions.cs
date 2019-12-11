@@ -40,6 +40,23 @@ namespace Delobytes.AspNetCore
         }
 
         /// <summary>
+        /// Measures the time the request takes to process and returns this in a Server-Timing trailing HTTP header.
+        /// It is used to surface any back-end server timing metrics (e.g. database read/write, CPU time, file system
+        /// access, etc.) to the developer tools in the user's browser.
+        /// </summary>
+        /// <param name="application">The application builder.</param>
+        /// <returns>The same application builder.</returns>
+        public static IApplicationBuilder UseServerTiming(this IApplicationBuilder application)
+        {
+            if (application is null)
+            {
+                throw new ArgumentNullException(nameof(application));
+            }
+
+            return application.UseMiddleware<ServerTimingMiddleware>();
+        }
+
+        /// <summary>
         /// Executes the specified action if the specified <paramref name="condition"/> is <c>true</c> which can be
         /// used to conditionally add to the request execution pipeline.
         /// </summary>

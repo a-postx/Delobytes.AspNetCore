@@ -1,4 +1,5 @@
 ﻿using System;
+using Delobytes.AspNetCore.Middleware;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -10,6 +11,22 @@ namespace Delobytes.AspNetCore
     /// </summary>
     public static class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Adds the HTTP exception handling middleware.
+        /// </summary>
+        /// <param name="services">The services collection.</param>
+        /// <returns>The same services collection.</returns>
+        public static IServiceCollection AddHttpException(this IServiceCollection services) =>
+            services.AddSingleton<HttpExceptionMiddleware>();
+
+        /// <summary>
+        /// Adds the server timing middleware.
+        /// </summary>
+        /// <param name="services">The services collection.</param>
+        /// <returns>The same services collection.</returns>
+        public static IServiceCollection AddServerTiming(this IServiceCollection services) =>
+            services.AddSingleton<ServerTimingMiddleware>();
+
         /// <summary>
         /// Execute specified action if the specified <paramref name="condition"/> is <c>true</c>. Can be
         /// used to conditionally configure the MVC services.
