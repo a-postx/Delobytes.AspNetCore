@@ -65,12 +65,12 @@ namespace Delobytes.AspNetCore
                 return string.Empty;
             }
 
-            var length = title.Length;
-            var prevdash = false;
-            var stringBuilder = new StringBuilder(length);
+            int length = title.Length;
+            bool prevdash = false;
+            StringBuilder stringBuilder = new StringBuilder(length);
             char c;
 
-            for (var i = 0; i < length; ++i)
+            for (int i = 0; i < length; ++i)
             {
                 c = title[i];
                 if ((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9'))
@@ -95,7 +95,7 @@ namespace Delobytes.AspNetCore
                 }
                 else if (c >= 128)
                 {
-                    var previousLength = stringBuilder.Length;
+                    int previousLength = stringBuilder.Length;
 
                     if (remapToAscii)
                     {
@@ -137,7 +137,7 @@ namespace Delobytes.AspNetCore
         private static string RemapInternationalCharToAscii(char character)
         {
 #pragma warning disable CA1308 // Normalize strings to uppercase
-            var s = new string(character, 1).ToLowerInvariant();
+            string s = new string(character, 1).ToLowerInvariant();
 #pragma warning restore CA1308 // Normalize strings to uppercase
             if ("àåáâäãåąā".Contains(s))
             {

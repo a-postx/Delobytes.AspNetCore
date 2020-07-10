@@ -47,7 +47,7 @@ namespace Delobytes.AspNetCore
                 throw new ArgumentNullException(nameof(request));
             }
 
-            var connection = request.HttpContext.Connection;
+            ConnectionInfo connection = request.HttpContext.Connection;
             if (connection.RemoteIpAddress != null)
             {
                 if (connection.LocalIpAddress != null)

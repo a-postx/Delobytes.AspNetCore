@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Delobytes.AspNetCore
@@ -20,7 +21,7 @@ namespace Delobytes.AspNetCore
         /// <param name="key">The cache item key.</param>
         /// <returns>The <see cref="bool"/> value or <c>null</c> if the key was not found.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="cache"/> or <paramref name="key"/> is <c>null</c>.</exception>
-        public static async Task<bool?> GetBooleanAsync(this IDistributedCache cache, string key)
+        public static async Task<bool?> GetBooleanAsync(this IDistributedCache cache, string key, CancellationToken cancellationToken = default)
         {
             if (cache == null)
             {
@@ -32,15 +33,16 @@ namespace Delobytes.AspNetCore
                 throw new ArgumentNullException(nameof(key));
             }
 
-            var bytes = await cache.GetAsync(key).ConfigureAwait(false);
+            byte[] bytes = await cache.GetAsync(key, cancellationToken).ConfigureAwait(false);
+
             if (bytes == null)
             {
                 return null;
             }
 
-            using (var memoryStream = new MemoryStream(bytes))
+            using (MemoryStream memoryStream = new MemoryStream(bytes))
             {
-                var binaryReader = new BinaryReader(memoryStream);
+                BinaryReader binaryReader = new BinaryReader(memoryStream);
                 return binaryReader.ReadBoolean();
             }
         }
@@ -53,7 +55,7 @@ namespace Delobytes.AspNetCore
         /// <param name="key">The cache item key.</param>
         /// <returns>The <see cref="char"/> value or <c>null</c> if the key was not found.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="cache"/> or <paramref name="key"/> is <c>null</c>.</exception>
-        public static async Task<char?> GetCharAsync(this IDistributedCache cache, string key)
+        public static async Task<char?> GetCharAsync(this IDistributedCache cache, string key, CancellationToken cancellationToken = default)
         {
             if (cache == null)
             {
@@ -65,15 +67,16 @@ namespace Delobytes.AspNetCore
                 throw new ArgumentNullException(nameof(key));
             }
 
-            var bytes = await cache.GetAsync(key).ConfigureAwait(false);
+            byte[] bytes = await cache.GetAsync(key, cancellationToken).ConfigureAwait(false);
+
             if (bytes == null)
             {
                 return null;
             }
 
-            using (var memoryStream = new MemoryStream(bytes))
+            using (MemoryStream memoryStream = new MemoryStream(bytes))
             {
-                var binaryReader = new BinaryReader(memoryStream);
+                BinaryReader binaryReader = new BinaryReader(memoryStream);
                 return binaryReader.ReadChar();
             }
         }
@@ -86,7 +89,7 @@ namespace Delobytes.AspNetCore
         /// <param name="key">The cache item key.</param>
         /// <returns>The <see cref="decimal"/> value or <c>null</c> if the key was not found.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="cache"/> or <paramref name="key"/> is <c>null</c>.</exception>
-        public static async Task<decimal?> GetDecimalAsync(this IDistributedCache cache, string key)
+        public static async Task<decimal?> GetDecimalAsync(this IDistributedCache cache, string key, CancellationToken cancellationToken = default)
         {
             if (cache == null)
             {
@@ -98,15 +101,16 @@ namespace Delobytes.AspNetCore
                 throw new ArgumentNullException(nameof(key));
             }
 
-            var bytes = await cache.GetAsync(key).ConfigureAwait(false);
+            byte[] bytes = await cache.GetAsync(key, cancellationToken).ConfigureAwait(false);
+
             if (bytes == null)
             {
                 return null;
             }
 
-            using (var memoryStream = new MemoryStream(bytes))
+            using (MemoryStream memoryStream = new MemoryStream(bytes))
             {
-                var binaryReader = new BinaryReader(memoryStream);
+                BinaryReader binaryReader = new BinaryReader(memoryStream);
                 return binaryReader.ReadDecimal();
             }
         }
@@ -119,7 +123,7 @@ namespace Delobytes.AspNetCore
         /// <param name="key">The cache item key.</param>
         /// <returns>The <see cref="double"/> value or <c>null</c> if the key was not found.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="cache"/> or <paramref name="key"/> is <c>null</c>.</exception>
-        public static async Task<double?> GetDoubleAsync(this IDistributedCache cache, string key)
+        public static async Task<double?> GetDoubleAsync(this IDistributedCache cache, string key, CancellationToken cancellationToken = default)
         {
             if (cache == null)
             {
@@ -131,15 +135,16 @@ namespace Delobytes.AspNetCore
                 throw new ArgumentNullException(nameof(key));
             }
 
-            var bytes = await cache.GetAsync(key).ConfigureAwait(false);
+            byte[] bytes = await cache.GetAsync(key, cancellationToken).ConfigureAwait(false);
+
             if (bytes == null)
             {
                 return null;
             }
 
-            using (var memoryStream = new MemoryStream(bytes))
+            using (MemoryStream memoryStream = new MemoryStream(bytes))
             {
-                var binaryReader = new BinaryReader(memoryStream);
+                BinaryReader binaryReader = new BinaryReader(memoryStream);
                 return binaryReader.ReadDouble();
             }
         }
@@ -152,7 +157,7 @@ namespace Delobytes.AspNetCore
         /// <param name="key">The cache item key.</param>
         /// <returns>The <see cref="short"/> value or <c>null</c> if the key was not found.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="cache"/> or <paramref name="key"/> is <c>null</c>.</exception>
-        public static async Task<short?> GetShortAsync(this IDistributedCache cache, string key)
+        public static async Task<short?> GetShortAsync(this IDistributedCache cache, string key, CancellationToken cancellationToken = default)
         {
             if (cache == null)
             {
@@ -164,15 +169,16 @@ namespace Delobytes.AspNetCore
                 throw new ArgumentNullException(nameof(key));
             }
 
-            var bytes = await cache.GetAsync(key).ConfigureAwait(false);
+            byte[] bytes = await cache.GetAsync(key, cancellationToken).ConfigureAwait(false);
+
             if (bytes == null)
             {
                 return null;
             }
 
-            using (var memoryStream = new MemoryStream(bytes))
+            using (MemoryStream memoryStream = new MemoryStream(bytes))
             {
-                var binaryReader = new BinaryReader(memoryStream);
+                BinaryReader binaryReader = new BinaryReader(memoryStream);
                 return binaryReader.ReadInt16();
             }
         }
@@ -185,7 +191,7 @@ namespace Delobytes.AspNetCore
         /// <param name="key">The cache item key.</param>
         /// <returns>The <see cref="int"/> value or <c>null</c> if the key was not found.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="cache"/> or <paramref name="key"/> is <c>null</c>.</exception>
-        public static async Task<int?> GetIntAsync(this IDistributedCache cache, string key)
+        public static async Task<int?> GetIntAsync(this IDistributedCache cache, string key, CancellationToken cancellationToken = default)
         {
             if (cache == null)
             {
@@ -197,15 +203,16 @@ namespace Delobytes.AspNetCore
                 throw new ArgumentNullException(nameof(key));
             }
 
-            var bytes = await cache.GetAsync(key).ConfigureAwait(false);
+            byte[] bytes = await cache.GetAsync(key, cancellationToken).ConfigureAwait(false);
+
             if (bytes == null)
             {
                 return null;
             }
 
-            using (var memoryStream = new MemoryStream(bytes))
+            using (MemoryStream memoryStream = new MemoryStream(bytes))
             {
-                var binaryReader = new BinaryReader(memoryStream);
+                BinaryReader binaryReader = new BinaryReader(memoryStream);
                 return binaryReader.ReadInt32();
             }
         }
@@ -218,7 +225,7 @@ namespace Delobytes.AspNetCore
         /// <param name="key">The cache item key.</param>
         /// <returns>The <see cref="long"/> value or <c>null</c> if the key was not found.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="cache"/> or <paramref name="key"/> is <c>null</c>.</exception>
-        public static async Task<long?> GetLongAsync(this IDistributedCache cache, string key)
+        public static async Task<long?> GetLongAsync(this IDistributedCache cache, string key, CancellationToken cancellationToken = default)
         {
             if (cache == null)
             {
@@ -230,15 +237,16 @@ namespace Delobytes.AspNetCore
                 throw new ArgumentNullException(nameof(key));
             }
 
-            var bytes = await cache.GetAsync(key).ConfigureAwait(false);
+            byte[] bytes = await cache.GetAsync(key, cancellationToken).ConfigureAwait(false);
+
             if (bytes == null)
             {
                 return null;
             }
 
-            using (var memoryStream = new MemoryStream(bytes))
+            using (MemoryStream memoryStream = new MemoryStream(bytes))
             {
-                var binaryReader = new BinaryReader(memoryStream);
+                BinaryReader binaryReader = new BinaryReader(memoryStream);
                 return binaryReader.ReadInt64();
             }
         }
@@ -251,7 +259,7 @@ namespace Delobytes.AspNetCore
         /// <param name="key">The cache item key.</param>
         /// <returns>The <see cref="float"/> value or <c>null</c> if the key was not found.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="cache"/> or <paramref name="key"/> is <c>null</c>.</exception>
-        public static async Task<float?> GetFloatAsync(this IDistributedCache cache, string key)
+        public static async Task<float?> GetFloatAsync(this IDistributedCache cache, string key, CancellationToken cancellationToken = default)
         {
             if (cache == null)
             {
@@ -263,15 +271,16 @@ namespace Delobytes.AspNetCore
                 throw new ArgumentNullException(nameof(key));
             }
 
-            var bytes = await cache.GetAsync(key).ConfigureAwait(false);
+            byte[] bytes = await cache.GetAsync(key, cancellationToken).ConfigureAwait(false);
+
             if (bytes == null)
             {
                 return null;
             }
 
-            using (var memoryStream = new MemoryStream(bytes))
+            using (MemoryStream memoryStream = new MemoryStream(bytes))
             {
-                var binaryReader = new BinaryReader(memoryStream);
+                BinaryReader binaryReader = new BinaryReader(memoryStream);
                 return binaryReader.ReadSingle();
             }
         }
@@ -285,7 +294,7 @@ namespace Delobytes.AspNetCore
         /// <param name="encoding">The encoding of the <see cref="string"/> value or <c>null</c> to use UTF-8.</param>
         /// <returns>The <see cref="string"/> value or <c>null</c> if the key was not found.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="cache"/> or <paramref name="key"/> is <c>null</c>.</exception>
-        public static async Task<string> GetStringAsync(this IDistributedCache cache, string key, Encoding encoding = null)
+        public static async Task<string> GetStringAsync(this IDistributedCache cache, string key, Encoding encoding = null, CancellationToken cancellationToken = default)
         {
             if (cache == null)
             {
@@ -302,7 +311,8 @@ namespace Delobytes.AspNetCore
                 encoding = Encoding.UTF8;
             }
 
-            var bytes = await cache.GetAsync(key).ConfigureAwait(false);
+            byte[] bytes = await cache.GetAsync(key, cancellationToken).ConfigureAwait(false);
+
             if (bytes == null)
             {
                 return null;
@@ -321,8 +331,11 @@ namespace Delobytes.AspNetCore
         /// <param name="encoding">The encoding of the JSON or <c>null</c> to use UTF-8.</param>
         /// <returns>The value of type <typeparamref name="T"/> or <c>null</c> if the key was not found.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="cache"/> or <paramref name="key"/> is <c>null</c>.</exception>
-        public static async Task<T> GetAsJsonAsync<T>(this IDistributedCache cache, string key, Encoding encoding = null)
-            where T : class
+        public static async Task<T> GetAsJsonAsync<T>(
+            this IDistributedCache cache,
+            string key,
+            Encoding encoding = null,
+            CancellationToken cancellationToken = default) where T : class
         {
             if (cache == null)
             {
@@ -339,7 +352,8 @@ namespace Delobytes.AspNetCore
                 encoding = Encoding.UTF8;
             }
 
-            var json = await GetStringAsync(cache, key, encoding).ConfigureAwait(false);
+            string json = await GetStringAsync(cache, key, encoding, cancellationToken).ConfigureAwait(false);
+
             if (json == null)
             {
                 return null;
@@ -361,7 +375,8 @@ namespace Delobytes.AspNetCore
             this IDistributedCache cache,
             string key,
             bool value,
-            DistributedCacheEntryOptions options = null)
+            DistributedCacheEntryOptions options = null,
+            CancellationToken cancellationToken = default)
         {
             if (cache == null)
             {
@@ -379,9 +394,9 @@ namespace Delobytes.AspNetCore
             }
 
             byte[] bytes;
-            using (var memoryStream = new MemoryStream())
+            using (MemoryStream memoryStream = new MemoryStream())
             {
-                using (var binaryWriter = new BinaryWriter(memoryStream))
+                using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
                 {
                     binaryWriter.Write(value);
                 }
@@ -389,7 +404,7 @@ namespace Delobytes.AspNetCore
                 bytes = memoryStream.ToArray();
             }
 
-            return cache.SetAsync(key, bytes, options);
+            return cache.SetAsync(key, bytes, options, cancellationToken);
         }
 
         /// <summary>
@@ -405,7 +420,8 @@ namespace Delobytes.AspNetCore
             this IDistributedCache cache,
             string key,
             char value,
-            DistributedCacheEntryOptions options = null)
+            DistributedCacheEntryOptions options = null,
+            CancellationToken cancellationToken = default)
         {
             if (cache == null)
             {
@@ -423,9 +439,9 @@ namespace Delobytes.AspNetCore
             }
 
             byte[] bytes;
-            using (var memoryStream = new MemoryStream())
+            using (MemoryStream memoryStream = new MemoryStream())
             {
-                using (var binaryWriter = new BinaryWriter(memoryStream))
+                using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
                 {
                     binaryWriter.Write(value);
                 }
@@ -433,7 +449,7 @@ namespace Delobytes.AspNetCore
                 bytes = memoryStream.ToArray();
             }
 
-            return cache.SetAsync(key, bytes, options);
+            return cache.SetAsync(key, bytes, options, cancellationToken);
         }
 
         /// <summary>
@@ -449,7 +465,8 @@ namespace Delobytes.AspNetCore
             this IDistributedCache cache,
             string key,
             decimal value,
-            DistributedCacheEntryOptions options = null)
+            DistributedCacheEntryOptions options = null,
+            CancellationToken cancellationToken = default)
         {
             if (cache == null)
             {
@@ -467,9 +484,9 @@ namespace Delobytes.AspNetCore
             }
 
             byte[] bytes;
-            using (var memoryStream = new MemoryStream())
+            using (MemoryStream memoryStream = new MemoryStream())
             {
-                using (var binaryWriter = new BinaryWriter(memoryStream))
+                using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
                 {
                     binaryWriter.Write(value);
                 }
@@ -477,7 +494,7 @@ namespace Delobytes.AspNetCore
                 bytes = memoryStream.ToArray();
             }
 
-            return cache.SetAsync(key, bytes, options);
+            return cache.SetAsync(key, bytes, options, cancellationToken);
         }
 
         /// <summary>
@@ -493,7 +510,8 @@ namespace Delobytes.AspNetCore
             this IDistributedCache cache,
             string key,
             double value,
-            DistributedCacheEntryOptions options)
+            DistributedCacheEntryOptions options,
+            CancellationToken cancellationToken = default)
         {
             if (cache == null)
             {
@@ -511,9 +529,9 @@ namespace Delobytes.AspNetCore
             }
 
             byte[] bytes;
-            using (var memoryStream = new MemoryStream())
+            using (MemoryStream memoryStream = new MemoryStream())
             {
-                using (var binaryWriter = new BinaryWriter(memoryStream))
+                using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
                 {
                     binaryWriter.Write(value);
                 }
@@ -521,7 +539,7 @@ namespace Delobytes.AspNetCore
                 bytes = memoryStream.ToArray();
             }
 
-            return cache.SetAsync(key, bytes, options);
+            return cache.SetAsync(key, bytes, options, cancellationToken);
         }
 
         /// <summary>
@@ -537,7 +555,8 @@ namespace Delobytes.AspNetCore
             this IDistributedCache cache,
             string key,
             short value,
-            DistributedCacheEntryOptions options = null)
+            DistributedCacheEntryOptions options = null,
+            CancellationToken cancellationToken = default)
         {
             if (cache == null)
             {
@@ -555,9 +574,9 @@ namespace Delobytes.AspNetCore
             }
 
             byte[] bytes;
-            using (var memoryStream = new MemoryStream())
+            using (MemoryStream memoryStream = new MemoryStream())
             {
-                using (var binaryWriter = new BinaryWriter(memoryStream))
+                using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
                 {
                     binaryWriter.Write(value);
                 }
@@ -565,7 +584,7 @@ namespace Delobytes.AspNetCore
                 bytes = memoryStream.ToArray();
             }
 
-            return cache.SetAsync(key, bytes, options);
+            return cache.SetAsync(key, bytes, options, cancellationToken);
         }
 
         /// <summary>
@@ -581,7 +600,8 @@ namespace Delobytes.AspNetCore
             this IDistributedCache cache,
             string key,
             int value,
-            DistributedCacheEntryOptions options = null)
+            DistributedCacheEntryOptions options = null,
+            CancellationToken cancellationToken = default)
         {
             if (cache == null)
             {
@@ -599,9 +619,9 @@ namespace Delobytes.AspNetCore
             }
 
             byte[] bytes;
-            using (var memoryStream = new MemoryStream())
+            using (MemoryStream memoryStream = new MemoryStream())
             {
-                using (var binaryWriter = new BinaryWriter(memoryStream))
+                using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
                 {
                     binaryWriter.Write(value);
                 }
@@ -609,7 +629,7 @@ namespace Delobytes.AspNetCore
                 bytes = memoryStream.ToArray();
             }
 
-            return cache.SetAsync(key, bytes, options);
+            return cache.SetAsync(key, bytes, options, cancellationToken);
         }
 
         /// <summary>
@@ -625,7 +645,8 @@ namespace Delobytes.AspNetCore
             this IDistributedCache cache,
             string key,
             long value,
-            DistributedCacheEntryOptions options = null)
+            DistributedCacheEntryOptions options = null,
+            CancellationToken cancellationToken = default)
         {
             if (cache == null)
             {
@@ -643,9 +664,9 @@ namespace Delobytes.AspNetCore
             }
 
             byte[] bytes;
-            using (var memoryStream = new MemoryStream())
+            using (MemoryStream memoryStream = new MemoryStream())
             {
-                using (var binaryWriter = new BinaryWriter(memoryStream))
+                using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
                 {
                     binaryWriter.Write(value);
                 }
@@ -653,7 +674,7 @@ namespace Delobytes.AspNetCore
                 bytes = memoryStream.ToArray();
             }
 
-            return cache.SetAsync(key, bytes, options);
+            return cache.SetAsync(key, bytes, options, cancellationToken);
         }
 
         /// <summary>
@@ -669,7 +690,8 @@ namespace Delobytes.AspNetCore
             this IDistributedCache cache,
             string key,
             float value,
-            DistributedCacheEntryOptions options = null)
+            DistributedCacheEntryOptions options = null,
+            CancellationToken cancellationToken = default)
         {
             if (cache == null)
             {
@@ -687,9 +709,9 @@ namespace Delobytes.AspNetCore
             }
 
             byte[] bytes;
-            using (var memoryStream = new MemoryStream())
+            using (MemoryStream memoryStream = new MemoryStream())
             {
-                using (var binaryWriter = new BinaryWriter(memoryStream))
+                using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
                 {
                     binaryWriter.Write(value);
                 }
@@ -697,7 +719,7 @@ namespace Delobytes.AspNetCore
                 bytes = memoryStream.ToArray();
             }
 
-            return cache.SetAsync(key, bytes, options);
+            return cache.SetAsync(key, bytes, options, cancellationToken);
         }
 
         /// <summary>
@@ -713,8 +735,9 @@ namespace Delobytes.AspNetCore
             this IDistributedCache cache,
             string key,
             string value,
-            DistributedCacheEntryOptions options = null) =>
-            SetAsync(cache, key, value, null, options);
+            DistributedCacheEntryOptions options = null,
+            CancellationToken cancellationToken = default) =>
+                SetAsync(cache, key, value, null, options, cancellationToken);
 
         /// <summary>
         /// Sets the <see cref="string"/> value with the specified key in the cache asynchronously.
@@ -731,7 +754,8 @@ namespace Delobytes.AspNetCore
             string key,
             string value,
             Encoding encoding = null,
-            DistributedCacheEntryOptions options = null)
+            DistributedCacheEntryOptions options = null,
+            CancellationToken cancellationToken = default)
         {
             if (cache == null)
             {
@@ -753,8 +777,8 @@ namespace Delobytes.AspNetCore
                 options = new DistributedCacheEntryOptions();
             }
 
-            var bytes = encoding.GetBytes(value);
-            return cache.SetAsync(key, bytes, options);
+            byte[] bytes = encoding.GetBytes(value);
+            return cache.SetAsync(key, bytes, options, cancellationToken);
         }
 
         /// <summary>
@@ -772,9 +796,9 @@ namespace Delobytes.AspNetCore
             this IDistributedCache cache,
             string key,
             T value,
-            DistributedCacheEntryOptions options = null)
-            where T : class =>
-            SetAsJsonAsync<T>(cache, key, value, null, options);
+            DistributedCacheEntryOptions options = null,
+            CancellationToken cancellationToken = default) where T : class =>
+                SetAsJsonAsync<T>(cache, key, value, null, options, cancellationToken);
 
         /// <summary>
         /// Sets the value of type <typeparamref name="T"/> with the specified key in the cache asynchronously by
@@ -793,8 +817,8 @@ namespace Delobytes.AspNetCore
             string key,
             T value,
             Encoding encoding = null,
-            DistributedCacheEntryOptions options = null)
-            where T : class
+            DistributedCacheEntryOptions options = null,
+            CancellationToken cancellationToken = default) where T : class
         {
             if (cache == null)
             {
@@ -816,8 +840,8 @@ namespace Delobytes.AspNetCore
                 options = new DistributedCacheEntryOptions();
             }
 
-            var json = JsonConvert.SerializeObject(value, Formatting.None);
-            return SetAsync(cache, key, json, encoding, options);
+            string json = JsonConvert.SerializeObject(value, Formatting.None);
+            return SetAsync(cache, key, json, encoding, options, cancellationToken);
         }
     }
 }

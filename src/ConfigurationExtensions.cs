@@ -15,8 +15,7 @@ namespace Delobytes.AspNetCore
         /// <param name="configuration">The configuration.</param>
         /// <param name="key">The section key. If <c>null</c>, the name of the type <typeparamref name="T"/> is used.</param>
         /// <returns>The bound object.</returns>
-        public static T GetSection<T>(this IConfiguration configuration, string key = null)
-            where T : new()
+        public static T GetSection<T>(this IConfiguration configuration, string key = null) where T : new()
         {
             if (configuration == null)
             {
@@ -28,7 +27,7 @@ namespace Delobytes.AspNetCore
                 key = typeof(T).Name;
             }
 
-            var section = new T();
+            T section = new T();
             configuration.GetSection(key).Bind(section);
             return section;
         }

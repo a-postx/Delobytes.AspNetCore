@@ -34,7 +34,7 @@ namespace Delobytes.AspNetCore
                 return default;
             }
 
-            var type = typeof(T);
+            Type type = typeof(T);
             type = Nullable.GetUnderlyingType(type) ?? type;
 
             if (type == typeof(DateTimeOffset))
@@ -68,8 +68,8 @@ namespace Delobytes.AspNetCore
                 return (null, null);
             }
 
-            var firstCursor = ToCursor(getCursorProperty(enumerable.First()));
-            var lastCursor = ToCursor(getCursorProperty(enumerable.Last()));
+            string firstCursor = ToCursor(getCursorProperty(enumerable.First()));
+            string lastCursor = ToCursor(getCursorProperty(enumerable.Last()));
 
             return (firstCursor, lastCursor);
         }
