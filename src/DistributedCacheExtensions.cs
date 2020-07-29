@@ -39,8 +39,16 @@ namespace Delobytes.AspNetCore
                 throw new ArgumentNullException(nameof(key));
             }
 
-            var bytes = await cache.GetAsync(key, cancellationToken).ConfigureAwait(false);
-            return Deserialize<T>(bytes, jsonSerializerOptions);
+            byte[] bytes = await cache.GetAsync(key, cancellationToken).ConfigureAwait(false);
+
+            if (bytes.Length > 0)
+            {
+                return Deserialize<T>(bytes, jsonSerializerOptions);
+            }
+            else
+            {
+                return default(T);
+            }
         }
 
         /// <summary>
@@ -76,13 +84,13 @@ namespace Delobytes.AspNetCore
                 throw new ArgumentNullException(nameof(key));
             }
 
-            var bytes = JsonSerializer.SerializeToUtf8Bytes(value, jsonSerializerOptions);
+            byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(value, jsonSerializerOptions);
             return cache.SetAsync(key, bytes, options, cancellationToken);
         }
 
         private static T Deserialize<T>(byte[] bytes, JsonSerializerOptions jsonSerializerOptions)
         {
-            var utf8JsonReader = new Utf8JsonReader(bytes);
+            Utf8JsonReader utf8JsonReader = new Utf8JsonReader(bytes);
             return JsonSerializer.Deserialize<T>(ref utf8JsonReader, jsonSerializerOptions);
         }
     }

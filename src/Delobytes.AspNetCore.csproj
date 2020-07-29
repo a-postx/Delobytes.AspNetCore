@@ -7,7 +7,7 @@
     <Company>Delobytes</Company>
     <Description>Middlewares, MVC filters, extension methods and helper code for ASP.NET Core projects.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>2.1.0</Version>
+    <Version>2.1.1</Version>
   </PropertyGroup>
 
 	<ItemGroup Label="Package References">
