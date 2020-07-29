@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Delobytes.AspNetCore.Middleware;
 
 namespace Delobytes.AspNetCore
@@ -60,21 +59,21 @@ namespace Delobytes.AspNetCore
         /// Executes the specified action if the specified <paramref name="condition"/> is <c>true</c> which can be
         /// used to conditionally add to the request execution pipeline.
         /// </summary>
-        /// <param name="application">Application builder.</param>
+        /// <param name="application">The application builder.</param>
         /// <param name="condition">If set to <c>true</c> the action is executed.</param>
-        /// <param name="action">Action used to add to the request execution pipeline.</param>
+        /// <param name="action">The action used to add to the request execution pipeline.</param>
         /// <returns>The same application builder.</returns>
         public static IApplicationBuilder UseIf(
             this IApplicationBuilder application,
             bool condition,
             Func<IApplicationBuilder, IApplicationBuilder> action)
         {
-            if (application == null)
+            if (application is null)
             {
                 throw new ArgumentNullException(nameof(application));
             }
 
-            if (action == null)
+            if (action is null)
             {
                 throw new ArgumentNullException(nameof(action));
             }
@@ -92,12 +91,12 @@ namespace Delobytes.AspNetCore
         /// <c>true</c>, otherwise executes the <paramref name="elseAction"/>. This can be used to conditionally add to
         /// the request execution pipeline.
         /// </summary>
-        /// <param name="application">Application builder.</param>
+        /// <param name="application">The application builder.</param>
         /// <param name="condition">If set to <c>true</c> the <paramref name="ifAction"/> is executed, otherwise the
         /// <paramref name="elseAction"/> is executed.</param>
-        /// <param name="ifAction">Action used to add to the request execution pipeline if the condition is
+        /// <param name="ifAction">The action used to add to the request execution pipeline if the condition is
         /// <c>true</c>.</param>
-        /// <param name="elseAction">Action used to add to the request execution pipeline if the condition is
+        /// <param name="elseAction">The action used to add to the request execution pipeline if the condition is
         /// <c>false</c>.</param>
         /// <returns>The same application builder.</returns>
         public static IApplicationBuilder UseIfElse(
@@ -106,142 +105,31 @@ namespace Delobytes.AspNetCore
             Func<IApplicationBuilder, IApplicationBuilder> ifAction,
             Func<IApplicationBuilder, IApplicationBuilder> elseAction)
         {
-            if (application == null)
+            if (application is null)
             {
                 throw new ArgumentNullException(nameof(application));
             }
 
-            if (ifAction == null)
+            if (ifAction is null)
             {
                 throw new ArgumentNullException(nameof(ifAction));
             }
 
-            if (elseAction == null)
+            if (elseAction is null)
             {
                 throw new ArgumentNullException(nameof(elseAction));
             }
 
-            application = condition ? ifAction(application) : elseAction(application);
+            if (condition)
+            {
+                application = ifAction(application);
+            }
+            else
+            {
+                application = elseAction(application);
+            }
 
             return application;
-        }
-
-        /// <summary>
-        /// Executes the specified action using <see cref="HttpContext"/> to determine if the specified
-        /// <paramref name="condition"/> is <c>true</c> which can be used to conditionally add to the request execution
-        /// pipeline.
-        /// </summary>
-        /// <param name="application">Application builder.</param>
-        /// <param name="condition">If set to <c>true</c> the action is executed.</param>
-        /// <param name="action">Action used to add to the request execution pipeline.</param>
-        /// <returns>The same application builder.</returns>
-        public static IApplicationBuilder UseIf(
-            this IApplicationBuilder application,
-            Func<HttpContext, bool> condition,
-            Func<IApplicationBuilder, IApplicationBuilder> action)
-        {
-            if (application == null)
-            {
-                throw new ArgumentNullException(nameof(application));
-            }
-
-            if (condition == null)
-            {
-                throw new ArgumentNullException(nameof(condition));
-            }
-
-            if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
-
-            IApplicationBuilder builder = application.New();
-
-            action(builder);
-
-            return application.Use(next =>
-            {
-                builder.Run(next);
-
-                RequestDelegate branch = builder.Build();
-
-                return context =>
-                {
-                    if (condition(context))
-                    {
-                        return branch(context);
-                    }
-
-                    return next(context);
-                };
-            });
-        }
-
-        /// <summary>
-        /// Executes the specified <paramref name="ifAction"/> using <see cref="HttpContext"/> to determine if the
-        /// specified <paramref name="condition"/> is <c>true</c>, otherwise executes the
-        /// <paramref name="elseAction"/>. This can be used to conditionally add to the request execution pipeline.
-        /// </summary>
-        /// <param name="application">Application builder.</param>
-        /// <param name="condition">If set to <c>true</c> the <paramref name="ifAction"/> is executed, otherwise the
-        /// <paramref name="elseAction"/> is executed.</param>
-        /// <param name="ifAction">Action used to add to the request execution pipeline if the condition is
-        /// <c>true</c>.</param>
-        /// <param name="elseAction">Action used to add to the request execution pipeline if the condition is
-        /// <c>false</c>.</param>
-        /// <returns>The same application builder.</returns>
-        public static IApplicationBuilder UseIfElse(
-            this IApplicationBuilder application,
-            Func<HttpContext, bool> condition,
-            Func<IApplicationBuilder, IApplicationBuilder> ifAction,
-            Func<IApplicationBuilder, IApplicationBuilder> elseAction)
-        {
-            if (application == null)
-            {
-                throw new ArgumentNullException(nameof(application));
-            }
-
-            if (condition == null)
-            {
-                throw new ArgumentNullException(nameof(condition));
-            }
-
-            if (ifAction == null)
-            {
-                throw new ArgumentNullException(nameof(ifAction));
-            }
-
-            if (elseAction == null)
-            {
-                throw new ArgumentNullException(nameof(elseAction));
-            }
-
-            IApplicationBuilder ifBuilder = application.New();
-            IApplicationBuilder elseBuilder = application.New();
-
-            ifAction(ifBuilder);
-            elseAction(elseBuilder);
-
-            return application.Use(next =>
-            {
-                ifBuilder.Run(next);
-                elseBuilder.Run(next);
-
-                RequestDelegate ifBranch = ifBuilder.Build();
-                RequestDelegate elseBranch = elseBuilder.Build();
-
-                return context =>
-                {
-                    if (condition(context))
-                    {
-                        return ifBranch(context);
-                    }
-                    else
-                    {
-                        return elseBranch(context);
-                    }
-                };
-            });
         }
     }
 }

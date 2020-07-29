@@ -25,15 +25,15 @@ namespace Delobytes.AspNetCore.Middleware
             }
             catch (HttpException httpException)
             {
-                var factory = context.RequestServices.GetRequiredService<ILoggerFactory>();
-                var logger = factory.CreateLogger<HttpExceptionMiddleware>();
+                ILoggerFactory factory = context.RequestServices.GetRequiredService<ILoggerFactory>();
+                ILogger<HttpExceptionMiddleware> logger = factory.CreateLogger<HttpExceptionMiddleware>();
                 logger.LogInformation(
                     httpException,
                     "Executing HttpExceptionMiddleware, setting HTTP status code {0}.",
                     httpException.StatusCode);
 
                 context.Response.StatusCode = httpException.StatusCode;
-                if (this.options.IncludeReasonPhraseInResponse)
+                if (options.IncludeReasonPhraseInResponse)
                 {
                     var responseFeature = context.Features.Get<IHttpResponseFeature>();
                     responseFeature.ReasonPhrase = httpException.Message;

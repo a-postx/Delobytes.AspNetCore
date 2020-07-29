@@ -28,24 +28,24 @@ namespace Delobytes.AspNetCore
             services.AddSingleton<ServerTimingMiddleware>();
 
         /// <summary>
-        /// Execute specified action if the specified <paramref name="condition"/> is <c>true</c>. Can be
+        /// Executes the specified action if the specified <paramref name="condition"/> is <c>true</c> which can be
         /// used to conditionally configure the MVC services.
         /// </summary>
-        /// <param name="services">Services collection.</param>
+        /// <param name="services">The services collection.</param>
         /// <param name="condition">If set to <c>true</c> the action is executed.</param>
-        /// <param name="action">Action used to configure the MVC services.</param>
+        /// <param name="action">The action used to configure the MVC services.</param>
         /// <returns>The same services collection.</returns>
         public static IServiceCollection AddIf(
             this IServiceCollection services,
             bool condition,
             Func<IServiceCollection, IServiceCollection> action)
         {
-            if (services == null)
+            if (services is null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
 
-            if (action == null)
+            if (action is null)
             {
                 throw new ArgumentNullException(nameof(action));
             }
@@ -59,15 +59,15 @@ namespace Delobytes.AspNetCore
         }
 
         /// <summary>
-        /// Execute specified <paramref name="ifAction"/> if the specified <paramref name="condition"/> is
-        /// <c>true</c>, otherwise execute the <paramref name="elseAction"/>. Can be used to conditionally
+        /// Executes the specified <paramref name="ifAction"/> if the specified <paramref name="condition"/> is
+        /// <c>true</c>, otherwise executes the <paramref name="elseAction"/>. This can be used to conditionally
         /// configure the MVC services.
         /// </summary>
-        /// <param name="services">Services collection.</param>
+        /// <param name="services">The services collection.</param>
         /// <param name="condition">If set to <c>true</c> the <paramref name="ifAction"/> is executed, otherwise the
         /// <paramref name="elseAction"/> is executed.</param>
-        /// <param name="ifAction">Action used to configure the MVC services if the condition is <c>true</c>.</param>
-        /// <param name="elseAction">Action used to configure the MVC services if the condition is <c>false</c>.</param>
+        /// <param name="ifAction">The action used to configure the MVC services if the condition is <c>true</c>.</param>
+        /// <param name="elseAction">The action used to configure the MVC services if the condition is <c>false</c>.</param>
         /// <returns>The same services collection.</returns>
         public static IServiceCollection AddIfElse(
             this IServiceCollection services,
@@ -75,88 +75,98 @@ namespace Delobytes.AspNetCore
             Func<IServiceCollection, IServiceCollection> ifAction,
             Func<IServiceCollection, IServiceCollection> elseAction)
         {
-            if (services == null)
+            if (services is null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
 
-            if (ifAction == null)
+            if (ifAction is null)
             {
                 throw new ArgumentNullException(nameof(ifAction));
             }
 
-            if (elseAction == null)
+            if (elseAction is null)
             {
                 throw new ArgumentNullException(nameof(elseAction));
             }
 
-            services = condition ? ifAction(services) : elseAction(services);
+            if (condition)
+            {
+                services = ifAction(services);
+            }
+            else
+            {
+                services = elseAction(services);
+            }
 
             return services;
         }
 
         /// <summary>
-        /// Register <see cref="IOptions{TOptions}"/> and <typeparamref name="TOptions"/> to the services container.
+        /// Registers <see cref="IOptions{TOptions}"/> and <typeparamref name="TOptions"/> to the services container.
         /// </summary>
-        /// <typeparam name="TOptions">Options type.</typeparam>
-        /// <param name="services">Services collection.</param>
-        /// <param name="configuration">Configuration.</param>
+        /// <typeparam name="TOptions">The type of the options.</typeparam>
+        /// <param name="services">The services collection.</param>
+        /// <param name="configuration">The configuration.</param>
         /// <returns>The same services collection.</returns>
         public static IServiceCollection ConfigureSingleton<TOptions>(
             this IServiceCollection services,
             IConfiguration configuration)
             where TOptions : class, new()
         {
-            if (services == null)
+            if (services is null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
 
-            if (configuration == null)
+            if (configuration is null)
             {
                 throw new ArgumentNullException(nameof(configuration));
             }
 
-            return services.Configure<TOptions>(configuration)
+            return services
+                .Configure<TOptions>(configuration)
                 .AddSingleton(x => x.GetRequiredService<IOptions<TOptions>>().Value);
         }
 
         /// <summary>
-        /// Register <see cref="IOptions{TOptions}"/> and <typeparamref name="TOptions"/> to the services container
-        /// and run data annotation validation.
+        /// Registers <see cref="IOptions{TOptions}"/> and <typeparamref name="TOptions"/> to the services container.
+        /// Also runs data annotation validation.
         /// </summary>
-        /// <typeparam name="TOptions">Options type.</typeparam>
-        /// <param name="services">Services collection.</param>
-        /// <param name="configuration">Configuration.</param>
+        /// <typeparam name="TOptions">The type of the options.</typeparam>
+        /// <param name="services">The services collection.</param>
+        /// <param name="configuration">The configuration.</param>
         /// <returns>The same services collection.</returns>
         public static IServiceCollection ConfigureAndValidateSingleton<TOptions>(
             this IServiceCollection services,
             IConfiguration configuration)
             where TOptions : class, new()
         {
-            if (services == null)
+            if (services is null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
 
-            if (configuration == null)
+            if (configuration is null)
             {
                 throw new ArgumentNullException(nameof(configuration));
             }
 
-            services.AddOptions<TOptions>().Bind(configuration).ValidateDataAnnotations();
-
+            services
+                .AddOptions<TOptions>()
+                .Bind(configuration)
+                .ValidateDataAnnotations();
             return services.AddSingleton(x => x.GetRequiredService<IOptions<TOptions>>().Value);
         }
 
         /// <summary>
-        /// Register <see cref="IOptions{TOptions}"/> and <typeparamref name="TOptions"/> to the services container,
-        /// run data annotation validation and custom validation using the default failure message.
+        /// Registers <see cref="IOptions{TOptions}"/> and <typeparamref name="TOptions"/> to the services container.
+        /// Also runs data annotation validation and custom validation using the default failure message.
         /// </summary>
-        /// <typeparam name="TOptions">Options type.</typeparam>
-        /// <param name="services">Services collection.</param>
-        /// <param name="configuration">Configuration.</param>
-        /// <param name="validation">Validation function.</param>
+        /// <typeparam name="TOptions">The type of the options.</typeparam>
+        /// <param name="services">The services collection.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="validation">The validation function.</param>
         /// <returns>The same services collection.</returns>
         public static IServiceCollection ConfigureAndValidateSingleton<TOptions>(
             this IServiceCollection services,
@@ -164,35 +174,38 @@ namespace Delobytes.AspNetCore
             Func<TOptions, bool> validation)
             where TOptions : class, new()
         {
-            if (services == null)
+            if (services is null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
 
-            if (configuration == null)
+            if (configuration is null)
             {
                 throw new ArgumentNullException(nameof(configuration));
             }
 
-            if (validation == null)
+            if (validation is null)
             {
                 throw new ArgumentNullException(nameof(validation));
             }
 
-            services.AddOptions<TOptions>().Bind(configuration).ValidateDataAnnotations().Validate(validation);
-
+            services
+                .AddOptions<TOptions>()
+                .Bind(configuration)
+                .ValidateDataAnnotations()
+                .Validate(validation);
             return services.AddSingleton(x => x.GetRequiredService<IOptions<TOptions>>().Value);
         }
 
         /// <summary>
-        /// Register <see cref="IOptions{TOptions}"/> and <typeparamref name="TOptions"/> to the services container,
-        /// run data annotation validation and custom validation.
+        /// Registers <see cref="IOptions{TOptions}"/> and <typeparamref name="TOptions"/> to the services container.
+        /// Also runs data annotation validation and custom validation.
         /// </summary>
-        /// <typeparam name="TOptions">Options type.</typeparam>
-        /// <param name="services">Services collection.</param>
-        /// <param name="configuration">Configuration.</param>
-        /// <param name="validation">Validation function.</param>
-        /// <param name="failureMessage">Failure message to use when validation fails.</param>
+        /// <typeparam name="TOptions">The type of the options.</typeparam>
+        /// <param name="services">The services collection.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="validation">The validation function.</param>
+        /// <param name="failureMessage">The failure message to use when validation fails.</param>
         /// <returns>The same services collection.</returns>
         public static IServiceCollection ConfigureAndValidateSingleton<TOptions>(
             this IServiceCollection services,
@@ -201,28 +214,31 @@ namespace Delobytes.AspNetCore
             string failureMessage)
             where TOptions : class, new()
         {
-            if (services == null)
+            if (services is null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
 
-            if (configuration == null)
+            if (configuration is null)
             {
                 throw new ArgumentNullException(nameof(configuration));
             }
 
-            if (validation == null)
+            if (validation is null)
             {
                 throw new ArgumentNullException(nameof(validation));
             }
 
-            if (failureMessage == null)
+            if (failureMessage is null)
             {
                 throw new ArgumentNullException(nameof(failureMessage));
             }
 
-            services.AddOptions<TOptions>().Bind(configuration).ValidateDataAnnotations().Validate(validation, failureMessage);
-
+            services
+                .AddOptions<TOptions>()
+                .Bind(configuration)
+                .ValidateDataAnnotations()
+                .Validate(validation, failureMessage);
             return services.AddSingleton(x => x.GetRequiredService<IOptions<TOptions>>().Value);
         }
     }

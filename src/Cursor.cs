@@ -34,7 +34,7 @@ namespace Delobytes.AspNetCore
                 return default;
             }
 
-            Type type = typeof(T);
+            var type = typeof(T);
             type = Nullable.GetUnderlyingType(type) ?? type;
 
             if (type == typeof(DateTimeOffset))
@@ -58,18 +58,18 @@ namespace Delobytes.AspNetCore
             IEnumerable<TItem> enumerable,
             Func<TItem, TCursor> getCursorProperty)
         {
-            if (getCursorProperty == null)
+            if (getCursorProperty is null)
             {
                 throw new ArgumentNullException(nameof(getCursorProperty));
             }
 
-            if (enumerable == null || !enumerable.Any())
+            if (enumerable is null || !enumerable.Any())
             {
                 return (null, null);
             }
 
-            string firstCursor = ToCursor(getCursorProperty(enumerable.First()));
-            string lastCursor = ToCursor(getCursorProperty(enumerable.Last()));
+            var firstCursor = ToCursor(getCursorProperty(enumerable.First()));
+            var lastCursor = ToCursor(getCursorProperty(enumerable.Last()));
 
             return (firstCursor, lastCursor);
         }
@@ -83,14 +83,9 @@ namespace Delobytes.AspNetCore
         /// <exception cref="ArgumentNullException"><paramref name="value"/> is <c>null</c>.</exception>
         public static string ToCursor<T>(T value)
         {
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
-            }
-
-            if (value is DateTime dateTime)
-            {
-                return Base64Encode(dateTime.ToString("o", CultureInfo.InvariantCulture));
             }
 
             if (value is DateTimeOffset dateTimeOffset)
