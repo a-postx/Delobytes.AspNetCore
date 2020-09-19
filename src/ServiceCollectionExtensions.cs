@@ -108,10 +108,12 @@ namespace Delobytes.AspNetCore
         /// <typeparam name="TOptions">The type of the options.</typeparam>
         /// <param name="services">The services collection.</param>
         /// <param name="configuration">The configuration.</param>
+        /// <param name="configureBinder">Used to configure the binder options.</param>
         /// <returns>The same services collection.</returns>
         public static IServiceCollection ConfigureSingleton<TOptions>(
             this IServiceCollection services,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            Action<BinderOptions> configureBinder)
             where TOptions : class, new()
         {
             if (services is null)
@@ -125,7 +127,7 @@ namespace Delobytes.AspNetCore
             }
 
             return services
-                .Configure<TOptions>(configuration)
+                .Configure<TOptions>(configuration, configureBinder)
                 .AddSingleton(x => x.GetRequiredService<IOptions<TOptions>>().Value);
         }
 
@@ -136,10 +138,12 @@ namespace Delobytes.AspNetCore
         /// <typeparam name="TOptions">The type of the options.</typeparam>
         /// <param name="services">The services collection.</param>
         /// <param name="configuration">The configuration.</param>
+        /// <param name="configureBinder">Used to configure the binder options.</param>
         /// <returns>The same services collection.</returns>
         public static IServiceCollection ConfigureAndValidateSingleton<TOptions>(
             this IServiceCollection services,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            Action<BinderOptions> configureBinder)
             where TOptions : class, new()
         {
             if (services is null)
@@ -154,7 +158,7 @@ namespace Delobytes.AspNetCore
 
             services
                 .AddOptions<TOptions>()
-                .Bind(configuration)
+                .Bind(configuration, configureBinder)
                 .ValidateDataAnnotations();
             return services.AddSingleton(x => x.GetRequiredService<IOptions<TOptions>>().Value);
         }
@@ -167,11 +171,13 @@ namespace Delobytes.AspNetCore
         /// <param name="services">The services collection.</param>
         /// <param name="configuration">The configuration.</param>
         /// <param name="validation">The validation function.</param>
+        /// <param name="configureBinder">Used to configure the binder options.</param>
         /// <returns>The same services collection.</returns>
         public static IServiceCollection ConfigureAndValidateSingleton<TOptions>(
             this IServiceCollection services,
             IConfiguration configuration,
-            Func<TOptions, bool> validation)
+            Func<TOptions, bool> validation,
+            Action<BinderOptions> configureBinder)
             where TOptions : class, new()
         {
             if (services is null)
@@ -191,7 +197,7 @@ namespace Delobytes.AspNetCore
 
             services
                 .AddOptions<TOptions>()
-                .Bind(configuration)
+                .Bind(configuration, configureBinder)
                 .ValidateDataAnnotations()
                 .Validate(validation);
             return services.AddSingleton(x => x.GetRequiredService<IOptions<TOptions>>().Value);
@@ -206,12 +212,14 @@ namespace Delobytes.AspNetCore
         /// <param name="configuration">The configuration.</param>
         /// <param name="validation">The validation function.</param>
         /// <param name="failureMessage">The failure message to use when validation fails.</param>
+        /// <param name="configureBinder">Used to configure the binder options.</param>
         /// <returns>The same services collection.</returns>
         public static IServiceCollection ConfigureAndValidateSingleton<TOptions>(
             this IServiceCollection services,
             IConfiguration configuration,
             Func<TOptions, bool> validation,
-            string failureMessage)
+            string failureMessage,
+            Action<BinderOptions> configureBinder)
             where TOptions : class, new()
         {
             if (services is null)
@@ -236,7 +244,7 @@ namespace Delobytes.AspNetCore
 
             services
                 .AddOptions<TOptions>()
-                .Bind(configuration)
+                .Bind(configuration, configureBinder)
                 .ValidateDataAnnotations()
                 .Validate(validation, failureMessage);
             return services.AddSingleton(x => x.GetRequiredService<IOptions<TOptions>>().Value);

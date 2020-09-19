@@ -37,6 +37,11 @@ namespace Delobytes.AspNetCore
             var type = typeof(T);
             type = Nullable.GetUnderlyingType(type) ?? type;
 
+            if (type == typeof(DateTime))
+            {
+                return (T)(object)DateTime.ParseExact(decodedValue, "o", CultureInfo.InvariantCulture);
+            }
+
             if (type == typeof(DateTimeOffset))
             {
                 return (T)(object)DateTimeOffset.ParseExact(decodedValue, "o", CultureInfo.InvariantCulture);
@@ -86,6 +91,11 @@ namespace Delobytes.AspNetCore
             if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
+            }
+
+            if (value is DateTime dateTime)
+            {
+                return Base64Encode(dateTime.ToString("o", CultureInfo.InvariantCulture));
             }
 
             if (value is DateTimeOffset dateTimeOffset)
