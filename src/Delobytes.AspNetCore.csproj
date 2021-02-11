@@ -6,6 +6,7 @@
     <Authors>Alexey Yakubin, Muhammad Rehan Saeed</Authors>
     <Company>Delobytes</Company>
     <Description>Middlewares, MVC filters, extension methods and helper code for ASP.NET Core projects.</Description>
+	<PackageProjectUrl>https://github.com/a-postx/Delobytes.AspNetCore</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Version>4.0.0</Version>
     <RepositoryUrl>https://github.com/a-postx/Delobytes.AspNetCore.git</RepositoryUrl>
@@ -13,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup Label="Package References">
-	<FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
 </Project>
