@@ -1,4 +1,4 @@
-name: .NET Core
+name: 'Build, test and publish packages'
 
 on:
   push:
