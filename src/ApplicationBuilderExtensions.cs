@@ -40,12 +40,11 @@ namespace Delobytes.AspNetCore
         }
 
         /// <summary>
-        /// Добавляет прослойку перехвата исключений . Прослойка обрамляет контекст логирования
-        /// специальными удостоверениями пользовательской сущности.
+        /// Добавляет прослойку перехвата исключений.
         /// </summary>
-        /// <param name="app"></param>
+        /// <param name="application"></param>
         /// <returns></returns>
-        public static IApplicationBuilder UseHttpExceptionHandling(this IApplicationBuilder application, Action<HttpExceptionHandlerOptions> configureOptions)
+        public static IApplicationBuilder UseHttpExceptionHandling(this IApplicationBuilder application, Action<HttpExceptionHandlerOptions> configureOptions = null)
         {
             if (application == null)
             {
