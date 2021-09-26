@@ -19,6 +19,7 @@ namespace Delobytes.AspNetCore
             return UseHttpException(application, null);
         }
 
+
         /// <summary>
         /// Use <see cref="HttpException"/> as an alternative method of returning error result.
         /// </summary>
@@ -36,6 +37,25 @@ namespace Delobytes.AspNetCore
             configureOptions?.Invoke(options);
 
             return application.UseMiddleware<HttpExceptionMiddleware>(options);
+        }
+
+        /// <summary>
+        /// Добавляет прослойку перехвата исключений . Прослойка обрамляет контекст логирования
+        /// специальными удостоверениями пользовательской сущности.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <returns></returns>
+        public static IApplicationBuilder UseHttpExceptionHandling(this IApplicationBuilder application, Action<HttpExceptionHandlerOptions> configureOptions)
+        {
+            if (application == null)
+            {
+                throw new ArgumentNullException(nameof(application));
+            }
+
+            HttpExceptionHandlerOptions options = new HttpExceptionHandlerOptions();
+            configureOptions?.Invoke(options);
+
+            return application.UseMiddleware<HttpExceptionHandler>(options);
         }
 
         /// <summary>
