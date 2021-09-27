@@ -54,7 +54,7 @@ namespace Delobytes.AspNetCore.Middleware
                 Status = StatusCodes.Status500InternalServerError,
                 Title = ex.Message,
                 Type = null,
-                Detail = _options.IncludeStackTrace ? ex.StackTrace : null,
+                Detail = _options.IncludeStackTraceInResponse ? ex.StackTrace : null,
                 Instance = context.Request.HttpContext.Request.Path,
             };
 

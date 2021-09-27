@@ -6,8 +6,8 @@
     public class HttpExceptionHandlerOptions
     {
         /// <summary>
-        /// Включать ли детали исключения в вывод.
+        /// Включать ли детали исключения в вывод деталей проблемы.
         /// </summary>
-        public bool IncludeStackTrace { get; set; } = false;
+        public bool IncludeStackTraceInResponse { get; set; } = false;
     }
 }
