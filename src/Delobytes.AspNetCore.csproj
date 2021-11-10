@@ -8,7 +8,7 @@
     <Description>Middlewares, MVC filters, extension methods and helper code for ASP.NET Core projects.</Description>
 	<PackageProjectUrl>https://github.com/a-postx/Delobytes.AspNetCore</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>5.0.0-alpha</Version>
+    <Version>5.0.0-alpha1</Version>
     <RepositoryUrl>https://github.com/a-postx/Delobytes.AspNetCore.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
