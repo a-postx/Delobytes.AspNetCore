@@ -5,85 +5,84 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 
-namespace Delobytes.AspNetCore
+namespace Delobytes.AspNetCore;
+
+/// <summary>
+/// <see cref="HttpContext"/> extension methods.
+/// </summary>
+public static class HttpContextExtensions
 {
+    private const string NoCache = "no-cache";
+    private const string NoCacheMaxAge = "no-cache,max-age=";
+    private const string NoStore = "no-store";
+    private const string NoStoreNoCache = "no-store,no-cache";
+    private const string PublicMaxAge = "public,max-age=";
+    private const string PrivateMaxAge = "private,max-age=";
+
     /// <summary>
-    /// <see cref="HttpContext"/> extension methods.
+    /// Adds Cache-Control and Pragma HTTP headers by applying specified cache profile to the HTTP context.
     /// </summary>
-    public static class HttpContextExtensions
+    /// <param name="context">HTTP context.</param>
+    /// <param name="cacheProfile">Cache profile.</param>
+    /// <returns>The same HTTP context.</returns>
+    /// <exception cref="System.ArgumentNullException">context or cacheProfile.</exception>
+    public static HttpContext ApplyCacheProfile(this HttpContext context, CacheProfile cacheProfile)
     {
-        private const string NoCache = "no-cache";
-        private const string NoCacheMaxAge = "no-cache,max-age=";
-        private const string NoStore = "no-store";
-        private const string NoStoreNoCache = "no-store,no-cache";
-        private const string PublicMaxAge = "public,max-age=";
-        private const string PrivateMaxAge = "private,max-age=";
-
-        /// <summary>
-        /// Adds Cache-Control and Pragma HTTP headers by applying specified cache profile to the HTTP context.
-        /// </summary>
-        /// <param name="context">HTTP context.</param>
-        /// <param name="cacheProfile">Cache profile.</param>
-        /// <returns>The same HTTP context.</returns>
-        /// <exception cref="System.ArgumentNullException">context or cacheProfile.</exception>
-        public static HttpContext ApplyCacheProfile(this HttpContext context, CacheProfile cacheProfile)
+        if (context == null)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            throw new ArgumentNullException(nameof(context));
+        }
 
-            if (cacheProfile == null)
-            {
-                throw new ArgumentNullException(nameof(cacheProfile));
-            }
+        if (cacheProfile == null)
+        {
+            throw new ArgumentNullException(nameof(cacheProfile));
+        }
 
-            IHeaderDictionary headers = context.Response.Headers;
+        IHeaderDictionary headers = context.Response.Headers;
 
-            if (!string.IsNullOrEmpty(cacheProfile.VaryByHeader))
-            {
-                headers[HeaderNames.Vary] = cacheProfile.VaryByHeader;
-            }
+        if (!string.IsNullOrEmpty(cacheProfile.VaryByHeader))
+        {
+            headers[HeaderNames.Vary] = cacheProfile.VaryByHeader;
+        }
 
-            if (cacheProfile.NoStore == true)
+        if (cacheProfile.NoStore == true)
+        {
+            // Cache-control: no-store, no-cache is valid.
+            if (cacheProfile.Location == ResponseCacheLocation.None)
             {
-                // Cache-control: no-store, no-cache is valid.
-                if (cacheProfile.Location == ResponseCacheLocation.None)
-                {
-                    headers[HeaderNames.CacheControl] = NoStoreNoCache;
-                    headers[HeaderNames.Pragma] = NoCache;
-                }
-                else
-                {
-                    headers[HeaderNames.CacheControl] = NoStore;
-                }
+                headers[HeaderNames.CacheControl] = NoStoreNoCache;
+                headers[HeaderNames.Pragma] = NoCache;
             }
             else
             {
-                string cacheControlValue;
-                string duration = cacheProfile.Duration.GetValueOrDefault().ToString(CultureInfo.InvariantCulture);
-                switch (cacheProfile.Location)
-                {
-                    case ResponseCacheLocation.Any:
-                        cacheControlValue = PublicMaxAge + duration;
-                        break;
-                    case ResponseCacheLocation.Client:
-                        cacheControlValue = PrivateMaxAge + duration;
-                        break;
-                    case ResponseCacheLocation.None:
-                        cacheControlValue = NoCacheMaxAge + duration;
-                        headers[HeaderNames.Pragma] = NoCache;
-                        break;
-                    default:
-                        NotImplementedException exception = new NotImplementedException($"Unknown {nameof(ResponseCacheLocation)}: {cacheProfile.Location}");
-                        Debug.Fail(exception.ToString());
-                        throw exception;
-                }
-
-                headers[HeaderNames.CacheControl] = cacheControlValue;
+                headers[HeaderNames.CacheControl] = NoStore;
+            }
+        }
+        else
+        {
+            string cacheControlValue;
+            string duration = cacheProfile.Duration.GetValueOrDefault().ToString(CultureInfo.InvariantCulture);
+            switch (cacheProfile.Location)
+            {
+                case ResponseCacheLocation.Any:
+                    cacheControlValue = PublicMaxAge + duration;
+                    break;
+                case ResponseCacheLocation.Client:
+                    cacheControlValue = PrivateMaxAge + duration;
+                    break;
+                case ResponseCacheLocation.None:
+                    cacheControlValue = NoCacheMaxAge + duration;
+                    headers[HeaderNames.Pragma] = NoCache;
+                    break;
+                default:
+                    NotImplementedException exception = new NotImplementedException($"Unknown {nameof(ResponseCacheLocation)}: {cacheProfile.Location}");
+                    Debug.Fail(exception.ToString());
+                    throw exception;
             }
 
-            return context;
+            headers[HeaderNames.CacheControl] = cacheControlValue;
         }
+
+        return context;
     }
 }

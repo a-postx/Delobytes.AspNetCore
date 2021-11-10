@@ -2,62 +2,61 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 
-namespace Delobytes.AspNetCore.Filters
+namespace Delobytes.AspNetCore.Filters;
+
+/// <summary>
+/// Requires that a HTTP request does not contain a trailing slash. If it does, return a 404 Not Found. This is
+/// useful if you are dynamically generating something which acts like it's a file on the web server.
+/// E.g. /Robots.txt/ should not have a trailing slash and should be /Robots.txt. Note, that we also don't care if
+/// it is upper-case or lower-case in this instance.
+/// </summary>
+[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, Inherited = true, AllowMultiple = false)]
+public class NoTrailingSlashAttribute : Attribute, IResourceFilter
 {
+    private const char SlashCharacter = '/';
+
     /// <summary>
-    /// Requires that a HTTP request does not contain a trailing slash. If it does, return a 404 Not Found. This is
-    /// useful if you are dynamically generating something which acts like it's a file on the web server.
-    /// E.g. /Robots.txt/ should not have a trailing slash and should be /Robots.txt. Note, that we also don't care if
-    /// it is upper-case or lower-case in this instance.
+    /// Executes the resource filter. Called after execution of the remainder of the pipeline.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, Inherited = true, AllowMultiple = false)]
-    public class NoTrailingSlashAttribute : Attribute, IResourceFilter
+    /// <param name="context">The <see cref="ResourceExecutedContext" />.</param>
+    public void OnResourceExecuted(ResourceExecutedContext context)
     {
-        private const char SlashCharacter = '/';
+    }
 
-        /// <summary>
-        /// Executes the resource filter. Called after execution of the remainder of the pipeline.
-        /// </summary>
-        /// <param name="context">The <see cref="ResourceExecutedContext" />.</param>
-        public void OnResourceExecuted(ResourceExecutedContext context)
+    /// <summary>
+    /// Executes the resource filter. Called before execution of the remainder of the pipeline. Determines whether
+    /// a request contains a trailing slash and, if it does, calls the <see cref="HandleTrailingSlashRequest"/>
+    /// method.
+    /// </summary>
+    /// <param name="context">The <see cref="ResourceExecutingContext" />.</param>
+    public void OnResourceExecuting(ResourceExecutingContext context)
+    {
+        if (context == null)
         {
+            throw new ArgumentNullException(nameof(context));
         }
 
-        /// <summary>
-        /// Executes the resource filter. Called before execution of the remainder of the pipeline. Determines whether
-        /// a request contains a trailing slash and, if it does, calls the <see cref="HandleTrailingSlashRequest"/>
-        /// method.
-        /// </summary>
-        /// <param name="context">The <see cref="ResourceExecutingContext" />.</param>
-        public void OnResourceExecuting(ResourceExecutingContext context)
+        var path = context.HttpContext.Request.Path;
+        if (path.HasValue)
         {
-            if (context == null)
+            if (path.Value[path.Value.Length - 1] == SlashCharacter)
             {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var path = context.HttpContext.Request.Path;
-            if (path.HasValue)
-            {
-                if (path.Value[path.Value.Length - 1] == SlashCharacter)
-                {
-                    this.HandleTrailingSlashRequest(context);
-                }
+                this.HandleTrailingSlashRequest(context);
             }
         }
+    }
 
-        /// <summary>
-        /// Handles HTTP requests that have a trailing slash but are not meant to.
-        /// </summary>
-        /// <param name="context">The <see cref="ResourceExecutingContext" />.</param>
-        protected virtual void HandleTrailingSlashRequest(ResourceExecutingContext context)
+    /// <summary>
+    /// Handles HTTP requests that have a trailing slash but are not meant to.
+    /// </summary>
+    /// <param name="context">The <see cref="ResourceExecutingContext" />.</param>
+    protected virtual void HandleTrailingSlashRequest(ResourceExecutingContext context)
+    {
+        if (context == null)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            context.Result = new NotFoundResult();
+            throw new ArgumentNullException(nameof(context));
         }
+
+        context.Result = new NotFoundResult();
     }
 }

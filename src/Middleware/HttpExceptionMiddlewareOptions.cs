@@ -1,13 +1,12 @@
-﻿namespace Delobytes.AspNetCore.Middleware
+﻿namespace Delobytes.AspNetCore.Middleware;
+
+/// <summary>
+/// Options controlling <see cref="HttpExceptionMiddleware"/>.
+/// </summary>
+public class HttpExceptionMiddlewareOptions
 {
     /// <summary>
-    /// Options controlling <see cref="HttpExceptionMiddleware"/>.
+    /// Property controlling if ReasonPhrase should be included in HttpResponseMessage.
     /// </summary>
-    public class HttpExceptionMiddlewareOptions
-    {
-        /// <summary>
-        /// Property controlling if ReasonPhrase should be included in HttpResponseMessage.
-        /// </summary>
-        public bool IncludeReasonPhraseInResponse { get; set; } = false;
-    }
+    public bool IncludeReasonPhraseInResponse { get; set; } = false;
 }
