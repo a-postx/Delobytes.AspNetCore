@@ -21,15 +21,8 @@ public static class LoggerFactoryExtensions
         bool condition,
         Func<ILoggerFactory, ILoggerFactory> action)
     {
-        if (loggerFactory is null)
-        {
-            throw new ArgumentNullException(nameof(loggerFactory));
-        }
-
-        if (action is null)
-        {
-            throw new ArgumentNullException(nameof(action));
-        }
+        ArgumentNullException.ThrowIfNull(loggerFactory);
+        ArgumentNullException.ThrowIfNull(action);
 
         if (condition)
         {
@@ -56,20 +49,9 @@ public static class LoggerFactoryExtensions
         Func<ILoggerFactory, ILoggerFactory> ifAction,
         Func<ILoggerFactory, ILoggerFactory> elseAction)
     {
-        if (loggerFactory is null)
-        {
-            throw new ArgumentNullException(nameof(loggerFactory));
-        }
-
-        if (ifAction is null)
-        {
-            throw new ArgumentNullException(nameof(ifAction));
-        }
-
-        if (elseAction is null)
-        {
-            throw new ArgumentNullException(nameof(elseAction));
-        }
+        ArgumentNullException.ThrowIfNull(loggerFactory);
+        ArgumentNullException.ThrowIfNull(ifAction);
+        ArgumentNullException.ThrowIfNull(elseAction);
 
         if (condition)
         {

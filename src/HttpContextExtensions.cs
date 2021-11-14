@@ -28,15 +28,8 @@ public static class HttpContextExtensions
     /// <exception cref="System.ArgumentNullException">context or cacheProfile.</exception>
     public static HttpContext ApplyCacheProfile(this HttpContext context, CacheProfile cacheProfile)
     {
-        if (context == null)
-        {
-            throw new ArgumentNullException(nameof(context));
-        }
-
-        if (cacheProfile == null)
-        {
-            throw new ArgumentNullException(nameof(cacheProfile));
-        }
+        ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(cacheProfile);
 
         IHeaderDictionary headers = context.Response.Headers;
 

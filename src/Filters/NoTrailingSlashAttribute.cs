@@ -31,17 +31,14 @@ public class NoTrailingSlashAttribute : Attribute, IResourceFilter
     /// <param name="context">The <see cref="ResourceExecutingContext" />.</param>
     public void OnResourceExecuting(ResourceExecutingContext context)
     {
-        if (context == null)
-        {
-            throw new ArgumentNullException(nameof(context));
-        }
+        ArgumentNullException.ThrowIfNull(context);
 
         var path = context.HttpContext.Request.Path;
         if (path.HasValue)
         {
             if (path.Value[path.Value.Length - 1] == SlashCharacter)
             {
-                this.HandleTrailingSlashRequest(context);
+                HandleTrailingSlashRequest(context);
             }
         }
     }
@@ -52,10 +49,7 @@ public class NoTrailingSlashAttribute : Attribute, IResourceFilter
     /// <param name="context">The <see cref="ResourceExecutingContext" />.</param>
     protected virtual void HandleTrailingSlashRequest(ResourceExecutingContext context)
     {
-        if (context == null)
-        {
-            throw new ArgumentNullException(nameof(context));
-        }
+        ArgumentNullException.ThrowIfNull(context);
 
         context.Result = new NotFoundResult();
     }

@@ -21,15 +21,8 @@ public static class ConfigurationBuilderExtensions
         bool condition,
         Func<IConfigurationBuilder, IConfigurationBuilder> action)
     {
-        if (configurationBuilder == null)
-        {
-            throw new ArgumentNullException(nameof(configurationBuilder));
-        }
-
-        if (action == null)
-        {
-            throw new ArgumentNullException(nameof(action));
-        }
+        ArgumentNullException.ThrowIfNull(configurationBuilder);
+        ArgumentNullException.ThrowIfNull(action);
 
         if (condition)
         {
@@ -58,20 +51,9 @@ public static class ConfigurationBuilderExtensions
         Func<IConfigurationBuilder, IConfigurationBuilder> ifAction,
         Func<IConfigurationBuilder, IConfigurationBuilder> elseAction)
     {
-        if (configurationBuilder == null)
-        {
-            throw new ArgumentNullException(nameof(configurationBuilder));
-        }
-
-        if (ifAction == null)
-        {
-            throw new ArgumentNullException(nameof(ifAction));
-        }
-
-        if (elseAction == null)
-        {
-            throw new ArgumentNullException(nameof(elseAction));
-        }
+        ArgumentNullException.ThrowIfNull(configurationBuilder);
+        ArgumentNullException.ThrowIfNull(ifAction);
+        ArgumentNullException.ThrowIfNull(elseAction);
 
         if (condition)
         {

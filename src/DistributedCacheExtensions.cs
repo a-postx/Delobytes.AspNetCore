@@ -29,15 +29,8 @@ public static class DistributedCacheExtensions
         JsonSerializerOptions jsonSerializerOptions = null,
         CancellationToken cancellationToken = default)
     {
-        if (cache is null)
-        {
-            throw new ArgumentNullException(nameof(cache));
-        }
-
-        if (key is null)
-        {
-            throw new ArgumentNullException(nameof(key));
-        }
+        ArgumentNullException.ThrowIfNull(cache);
+        ArgumentNullException.ThrowIfNull(key);
 
         byte[] bytes = await cache.GetAsync(key, cancellationToken).ConfigureAwait(false);
         return Deserialize<T>(bytes, jsonSerializerOptions);
@@ -66,15 +59,8 @@ public static class DistributedCacheExtensions
         CancellationToken cancellationToken = default)
         where T : class
     {
-        if (cache is null)
-        {
-            throw new ArgumentNullException(nameof(cache));
-        }
-
-        if (key is null)
-        {
-            throw new ArgumentNullException(nameof(key));
-        }
+        ArgumentNullException.ThrowIfNull(cache);
+        ArgumentNullException.ThrowIfNull(key);
 
         byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(value, jsonSerializerOptions);
         return cache.SetAsync(key, bytes, options, cancellationToken);

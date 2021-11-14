@@ -19,14 +19,8 @@ public static class ClaimPrincipalExtensions
     /// <exception cref="InvalidOperationException"><typeparam name="T"/> is not supported.</exception>
     public static T GetClaimValue<T>(this ClaimsPrincipal principal, string claimName)
     {
-        if (principal == null)
-        {
-            throw new ArgumentNullException(nameof(principal));
-        }
-        if (claimName == null)
-        {
-            throw new ArgumentNullException(nameof(claimName));
-        }
+        ArgumentNullException.ThrowIfNull(principal);
+        ArgumentNullException.ThrowIfNull(claimName);
 
         string claimValue = principal.FindFirst(claimName)?.Value;
 

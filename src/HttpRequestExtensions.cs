@@ -20,10 +20,7 @@ public static class HttpRequestExtensions
     /// <exception cref="ArgumentNullException">The <paramref name="request"/> parameter is <c>null</c>.</exception>
     public static bool IsAjaxRequest(this HttpRequest request)
     {
-        if (request == null)
-        {
-            throw new ArgumentNullException(nameof(request));
-        }
+        ArgumentNullException.ThrowIfNull(request);
 
         if (request.Headers != null)
         {
@@ -42,10 +39,7 @@ public static class HttpRequestExtensions
     /// <exception cref="ArgumentNullException">The <paramref name="request"/> parameter is <c>null</c>.</exception>
     public static bool IsLocalRequest(this HttpRequest request)
     {
-        if (request == null)
-        {
-            throw new ArgumentNullException(nameof(request));
-        }
+        ArgumentNullException.ThrowIfNull(request);
 
         ConnectionInfo connection = request.HttpContext.Connection;
         if (connection.RemoteIpAddress != null)

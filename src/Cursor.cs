@@ -47,6 +47,11 @@ public static class Cursor
             return (T)(object)DateTimeOffset.ParseExact(decodedValue, "o", CultureInfo.InvariantCulture);
         }
 
+        if (type == typeof(DateOnly))
+        {
+            return (T)(object)DateOnly.ParseExact(decodedValue, "o", CultureInfo.InvariantCulture);
+        }
+
         return (T)Convert.ChangeType(decodedValue, type, CultureInfo.InvariantCulture);
     }
 
@@ -63,10 +68,7 @@ public static class Cursor
         IEnumerable<TItem> enumerable,
         Func<TItem, TCursor> getCursorProperty)
     {
-        if (getCursorProperty is null)
-        {
-            throw new ArgumentNullException(nameof(getCursorProperty));
-        }
+        ArgumentNullException.ThrowIfNull(getCursorProperty);
 
         if (enumerable is null || !enumerable.Any())
         {
@@ -88,10 +90,7 @@ public static class Cursor
     /// <exception cref="ArgumentNullException"><paramref name="value"/> is <c>null</c>.</exception>
     public static string ToCursor<T>(T value)
     {
-        if (value is null)
-        {
-            throw new ArgumentNullException(nameof(value));
-        }
+        ArgumentNullException.ThrowIfNull(value);
 
         if (value is DateTime dateTime)
         {
@@ -101,6 +100,11 @@ public static class Cursor
         if (value is DateTimeOffset dateTimeOffset)
         {
             return Base64Encode(dateTimeOffset.ToString("o", CultureInfo.InvariantCulture));
+        }
+
+        if (value is DateOnly dateOnly)
+        {
+            return Base64Encode(dateOnly.ToString("o", CultureInfo.InvariantCulture));
         }
 
         return Base64Encode(value.ToString());

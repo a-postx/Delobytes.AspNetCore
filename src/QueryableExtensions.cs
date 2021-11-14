@@ -23,10 +23,7 @@ public static class QueryableExtensions
     /// <returns>Выражение с сортировкой по указанному свойству.</returns>
     public static IOrderedQueryable<TSource> OrderBy<TSource>(this IQueryable<TSource> query, string propertyName, bool desc) where TSource : class
     {
-        if (query == null)
-        {
-            throw new ArgumentException(nameof(query));
-        }
+        ArgumentNullException.ThrowIfNull(query);
 
         if (string.IsNullOrWhiteSpace(propertyName))
         {

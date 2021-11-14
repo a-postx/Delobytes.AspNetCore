@@ -21,15 +21,8 @@ public static class HostBuilderExtensions
         bool condition,
         Func<IHostBuilder, IHostBuilder> action)
     {
-        if (hostBuilder is null)
-        {
-            throw new ArgumentNullException(nameof(hostBuilder));
-        }
-
-        if (action is null)
-        {
-            throw new ArgumentNullException(nameof(action));
-        }
+        ArgumentNullException.ThrowIfNull(hostBuilder);
+        ArgumentNullException.ThrowIfNull(action);
 
         if (condition)
         {
@@ -52,20 +45,9 @@ public static class HostBuilderExtensions
         Func<IHostBuilder, bool> condition,
         Func<IHostBuilder, IHostBuilder> action)
     {
-        if (hostBuilder is null)
-        {
-            throw new ArgumentNullException(nameof(hostBuilder));
-        }
-
-        if (condition is null)
-        {
-            throw new ArgumentNullException(nameof(condition));
-        }
-
-        if (action is null)
-        {
-            throw new ArgumentNullException(nameof(action));
-        }
+        ArgumentNullException.ThrowIfNull(hostBuilder);
+        ArgumentNullException.ThrowIfNull(condition);
+        ArgumentNullException.ThrowIfNull(action);
 
         if (condition(hostBuilder))
         {
@@ -92,20 +74,10 @@ public static class HostBuilderExtensions
         Func<IHostBuilder, IHostBuilder> ifAction,
         Func<IHostBuilder, IHostBuilder> elseAction)
     {
-        if (hostBuilder is null)
-        {
-            throw new ArgumentNullException(nameof(hostBuilder));
-        }
-
-        if (ifAction is null)
-        {
-            throw new ArgumentNullException(nameof(ifAction));
-        }
-
-        if (elseAction is null)
-        {
-            throw new ArgumentNullException(nameof(elseAction));
-        }
+        ArgumentNullException.ThrowIfNull(hostBuilder);
+        ArgumentNullException.ThrowIfNull(condition);
+        ArgumentNullException.ThrowIfNull(ifAction);
+        ArgumentNullException.ThrowIfNull(elseAction);
 
         if (condition)
         {
@@ -136,25 +108,10 @@ public static class HostBuilderExtensions
         Func<IHostBuilder, IHostBuilder> ifAction,
         Func<IHostBuilder, IHostBuilder> elseAction)
     {
-        if (hostBuilder is null)
-        {
-            throw new ArgumentNullException(nameof(hostBuilder));
-        }
-
-        if (condition is null)
-        {
-            throw new ArgumentNullException(nameof(condition));
-        }
-
-        if (ifAction is null)
-        {
-            throw new ArgumentNullException(nameof(ifAction));
-        }
-
-        if (elseAction is null)
-        {
-            throw new ArgumentNullException(nameof(elseAction));
-        }
+        ArgumentNullException.ThrowIfNull(hostBuilder);
+        ArgumentNullException.ThrowIfNull(condition);
+        ArgumentNullException.ThrowIfNull(ifAction);
+        ArgumentNullException.ThrowIfNull(elseAction);
 
         if (condition(hostBuilder))
         {

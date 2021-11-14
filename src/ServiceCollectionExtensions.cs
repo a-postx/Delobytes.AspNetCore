@@ -40,15 +40,8 @@ public static class ServiceCollectionExtensions
         bool condition,
         Func<IServiceCollection, IServiceCollection> action)
     {
-        if (services is null)
-        {
-            throw new ArgumentNullException(nameof(services));
-        }
-
-        if (action is null)
-        {
-            throw new ArgumentNullException(nameof(action));
-        }
+        ArgumentNullException.ThrowIfNull(services);
+        ArgumentNullException.ThrowIfNull(action);
 
         if (condition)
         {
@@ -75,20 +68,9 @@ public static class ServiceCollectionExtensions
         Func<IServiceCollection, IServiceCollection> ifAction,
         Func<IServiceCollection, IServiceCollection> elseAction)
     {
-        if (services is null)
-        {
-            throw new ArgumentNullException(nameof(services));
-        }
-
-        if (ifAction is null)
-        {
-            throw new ArgumentNullException(nameof(ifAction));
-        }
-
-        if (elseAction is null)
-        {
-            throw new ArgumentNullException(nameof(elseAction));
-        }
+        ArgumentNullException.ThrowIfNull(services);
+        ArgumentNullException.ThrowIfNull(ifAction);
+        ArgumentNullException.ThrowIfNull(elseAction);
 
         if (condition)
         {
@@ -116,15 +98,8 @@ public static class ServiceCollectionExtensions
         Action<BinderOptions> configureBinder)
         where TOptions : class, new()
     {
-        if (services is null)
-        {
-            throw new ArgumentNullException(nameof(services));
-        }
-
-        if (configuration is null)
-        {
-            throw new ArgumentNullException(nameof(configuration));
-        }
+        ArgumentNullException.ThrowIfNull(services);
+        ArgumentNullException.ThrowIfNull(configuration);
 
         return services
             .Configure<TOptions>(configuration, configureBinder)
@@ -146,15 +121,8 @@ public static class ServiceCollectionExtensions
         Action<BinderOptions> configureBinder)
         where TOptions : class, new()
     {
-        if (services is null)
-        {
-            throw new ArgumentNullException(nameof(services));
-        }
-
-        if (configuration is null)
-        {
-            throw new ArgumentNullException(nameof(configuration));
-        }
+        ArgumentNullException.ThrowIfNull(services);
+        ArgumentNullException.ThrowIfNull(configuration);
 
         services
             .AddOptions<TOptions>()
@@ -180,20 +148,9 @@ public static class ServiceCollectionExtensions
         Action<BinderOptions> configureBinder)
         where TOptions : class, new()
     {
-        if (services is null)
-        {
-            throw new ArgumentNullException(nameof(services));
-        }
-
-        if (configuration is null)
-        {
-            throw new ArgumentNullException(nameof(configuration));
-        }
-
-        if (validation is null)
-        {
-            throw new ArgumentNullException(nameof(validation));
-        }
+        ArgumentNullException.ThrowIfNull(services);
+        ArgumentNullException.ThrowIfNull(configuration);
+        ArgumentNullException.ThrowIfNull(validation);
 
         services
             .AddOptions<TOptions>()
@@ -222,25 +179,10 @@ public static class ServiceCollectionExtensions
         Action<BinderOptions> configureBinder)
         where TOptions : class, new()
     {
-        if (services is null)
-        {
-            throw new ArgumentNullException(nameof(services));
-        }
-
-        if (configuration is null)
-        {
-            throw new ArgumentNullException(nameof(configuration));
-        }
-
-        if (validation is null)
-        {
-            throw new ArgumentNullException(nameof(validation));
-        }
-
-        if (failureMessage is null)
-        {
-            throw new ArgumentNullException(nameof(failureMessage));
-        }
+        ArgumentNullException.ThrowIfNull(services);
+        ArgumentNullException.ThrowIfNull(configuration);
+        ArgumentNullException.ThrowIfNull(validation);
+        ArgumentNullException.ThrowIfNull(failureMessage);
 
         services
             .AddOptions<TOptions>()

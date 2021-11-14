@@ -28,13 +28,10 @@ public class RedirectToCanonicalUrlRule : IRule
     /// <param name="options">The route options.</param>
     public RedirectToCanonicalUrlRule(IOptions<RouteOptions> options)
     {
-        if (options is null)
-        {
-            throw new ArgumentNullException(nameof(options));
-        }
+        ArgumentNullException.ThrowIfNull(options);
 
-        this.AppendTrailingSlash = options.Value.AppendTrailingSlash;
-        this.LowercaseUrls = options.Value.LowercaseUrls;
+        AppendTrailingSlash = options.Value.AppendTrailingSlash;
+        LowercaseUrls = options.Value.LowercaseUrls;
     }
 
     /// <summary>
@@ -47,8 +44,8 @@ public class RedirectToCanonicalUrlRule : IRule
         bool appendTrailingSlash,
         bool lowercaseUrls)
     {
-        this.AppendTrailingSlash = appendTrailingSlash;
-        this.LowercaseUrls = lowercaseUrls;
+        AppendTrailingSlash = appendTrailingSlash;
+        LowercaseUrls = lowercaseUrls;
     }
 
     /// <summary>
@@ -70,16 +67,13 @@ public class RedirectToCanonicalUrlRule : IRule
     /// <inheritdoc/>
     public void ApplyRule(RewriteContext context)
     {
-        if (context is null)
-        {
-            throw new ArgumentNullException(nameof(context));
-        }
+        ArgumentNullException.ThrowIfNull(context);
 
         if (HttpMethods.IsGet(context.HttpContext.Request.Method))
         {
-            if (!this.TryGetCanonicalUrl(context, out var canonicalUrl))
+            if (!TryGetCanonicalUrl(context, out Uri canonicalUrl))
             {
-                this.HandleNonCanonicalRequest(context, canonicalUrl);
+                HandleNonCanonicalRequest(context, canonicalUrl);
             }
         }
     }
@@ -92,10 +86,7 @@ public class RedirectToCanonicalUrlRule : IRule
     /// <returns><c>true</c> if the URL is canonical, otherwise <c>false</c>.</returns>
     protected virtual bool TryGetCanonicalUrl(RewriteContext context, out Uri canonicalUrl)
     {
-        if (context is null)
-        {
-            throw new ArgumentNullException(nameof(context));
-        }
+        ArgumentNullException.ThrowIfNull(context);
 
         var isCanonical = true;
 
@@ -108,10 +99,10 @@ public class RedirectToCanonicalUrlRule : IRule
         {
             var hasTrailingSlash = request.Path.Value[^1] == SlashCharacter;
 
-            if (this.AppendTrailingSlash)
+            if (AppendTrailingSlash)
             {
                 // Append a trailing slash to the end of the URL.
-                if (!hasTrailingSlash && !this.HasAttribute<NoTrailingSlashAttribute>(context))
+                if (!hasTrailingSlash && !HasAttribute<NoTrailingSlashAttribute>(context))
                 {
                     request.Path = new PathString(request.Path.Value + SlashCharacter);
                     isCanonical = false;
@@ -130,9 +121,9 @@ public class RedirectToCanonicalUrlRule : IRule
 
         if (hasPath || request.QueryString.HasValue)
         {
-            if (this.LowercaseUrls && !this.HasAttribute<NoTrailingSlashAttribute>(context))
+            if (LowercaseUrls && !HasAttribute<NoTrailingSlashAttribute>(context))
             {
-                foreach (var character in request.Path.Value)
+                foreach (char character in request.Path.Value)
                 {
                     if (char.IsUpper(character))
                     {
@@ -144,9 +135,9 @@ public class RedirectToCanonicalUrlRule : IRule
                     }
                 }
 
-                if (request.QueryString.HasValue && !this.HasAttribute<NoLowercaseQueryStringAttribute>(context))
+                if (request.QueryString.HasValue && !HasAttribute<NoLowercaseQueryStringAttribute>(context))
                 {
-                    foreach (var character in request.QueryString.Value)
+                    foreach (char character in request.QueryString.Value)
                     {
                         if (char.IsUpper(character))
                         {
@@ -180,17 +171,10 @@ public class RedirectToCanonicalUrlRule : IRule
     /// <param name="canonicalUrl">The canonical URL.</param>
     protected virtual void HandleNonCanonicalRequest(RewriteContext context, Uri canonicalUrl)
     {
-        if (context is null)
-        {
-            throw new ArgumentNullException(nameof(context));
-        }
+        ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(canonicalUrl);
 
-        if (canonicalUrl is null)
-        {
-            throw new ArgumentNullException(nameof(canonicalUrl));
-        }
-
-        var response = context.HttpContext.Response;
+        HttpResponse response = context.HttpContext.Response;
         response.StatusCode = StatusCodes.Status301MovedPermanently;
         context.Result = RuleResult.EndResponse;
         response.Headers[HeaderNames.Location] = canonicalUrl.ToString();
@@ -206,12 +190,9 @@ public class RedirectToCanonicalUrlRule : IRule
     protected virtual bool HasAttribute<T>(RewriteContext context)
         where T : class
     {
-        if (context is null)
-        {
-            throw new ArgumentNullException(nameof(context));
-        }
+        ArgumentNullException.ThrowIfNull(context);
 
-        var endpoint = context.HttpContext.GetEndpoint();
+        Endpoint endpoint = context.HttpContext.GetEndpoint();
         return endpoint.Metadata.GetMetadata<T>() is object;
     }
 }
