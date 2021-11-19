@@ -1,19 +1,34 @@
-using System;
+﻿using System;
 
 namespace Delobytes.AspNetCore.Application.Actions;
 
-public class Success : ApiResponse, ISuccess
+/// <summary>
+/// Объект удачного завершения действия.
+/// </summary>
+public class Success : ResponseObject, ISuccess
 {
+    /// <summary>
+    /// Конструктор.
+    /// </summary>
+    /// <param name="correlationId">Идентификатор корреляции.</param>
     protected Success(Guid correlationId) : base(correlationId) { }
 
+    /// <summary>
+    /// Конструктор.
+    /// </summary>
+    /// <param name="correlationId">Идентификатор корреляции.</param>
+    /// <param name="aggregateVersion">Версия агрегата.</param>
     public Success(Guid correlationId, string aggregateVersion = null) : base(correlationId)
     {
         AggregateVersion = aggregateVersion;
     }
 
+    /// <summary>
+    /// Признак удачного завершения действия.
+    /// </summary>
     public override bool IsSuccess => true;
     /// <summary>
-    /// TimeStamp or ETag
+    /// Версия агрегата (временная метка или еТаг).
     /// </summary>
     public string AggregateVersion { get; protected set; }
 }

@@ -1,5 +1,8 @@
-namespace Delobytes.AspNetCore.Application;
+﻿namespace Delobytes.AspNetCore.Application;
 
+/// <summary>
+/// Статус завершения команды.
+/// </summary>
 public enum CommandStatus
 {
     Unknown = 0,
