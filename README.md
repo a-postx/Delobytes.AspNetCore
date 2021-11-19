@@ -5,7 +5,7 @@
 
 ## Application
 
-https://github.com/a-postx/Delobytes.AspNetCore/blob/master/Delobytes.AspNetCore.App.jpg
+![схема использования](https://github.com/a-postx/Delobytes.AspNetCore/blob/master/Delobytes.AspNetCore.App.jpg)
 
 ## Лицензия
 [МИТ](https://github.com/a-postx/Delobytes.AspNetCore/blob/master/LICENSE)
