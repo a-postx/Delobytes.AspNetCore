@@ -68,12 +68,12 @@ jobs:
     name: 'Push GitHub Package'
     needs: [build, check-tag]
     if: success()
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
     - name: 'Download Artefact'
       uses: actions/download-artifact@v3.0.0
       with:
-        name: "ubuntu-latest"
+        name: 'windows-latest'
     - name: 'Dotnet NuGet Add Source'
       run: dotnet nuget add source https://nuget.pkg.github.com/Delobytes.AspNetCore/index.json --name GitHub --username a-postx --password ${{secrets.GITHUB_TOKEN}}
       shell: pwsh
@@ -82,13 +82,13 @@ jobs:
       shell: pwsh
   push-nuget-packages:
     name: 'Push NuGet Package'
-    needs: build
-    runs-on: ubuntu-latest
+    needs: [build, check-tag]
+    runs-on: windows-latest
     steps:
     - name: 'Download Artefact'
       uses: actions/download-artifact@v3.0.0
       with:
-        name: "ubuntu-latest"
+        name: 'windows-latest'
     - name: 'Dotnet NuGet Push'
       run: |
         Get-ChildItem .\windows-latest -Filter *.nupkg |
