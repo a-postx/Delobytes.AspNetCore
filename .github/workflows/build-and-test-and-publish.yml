@@ -47,7 +47,7 @@ jobs:
       uses: actions/upload-artifact@v3.0.0
       with:
         name: ${{matrix.os}}
-        path: "."
+        path: "distr"
         if-no-files-found: error
         retention-days: 1
   check-tag:
@@ -78,7 +78,7 @@ jobs:
       run: dotnet nuget add source https://nuget.pkg.github.com/Delobytes.AspNetCore/index.json --name GitHub --username a-postx --password ${{secrets.GITHUB_TOKEN}}
       shell: pwsh
     - name: 'Dotnet NuGet Push'
-      run: dotnet nuget push .\distr\*.nupkg --api-key ${{ github.token }} --source GitHub --skip-duplicate
+      run: dotnet nuget push .\*.nupkg --api-key ${{ github.token }} --source GitHub --skip-duplicate
       shell: pwsh
   push-nuget-packages:
     name: 'Push NuGet Package'
@@ -91,7 +91,7 @@ jobs:
         name: 'ubuntu-latest'
     - name: 'Dotnet NuGet Push'
       run: |
-        Get-ChildItem .\distr -Filter *.nupkg |
+        Get-ChildItem . -Filter *.nupkg |
         Where-Object { !$_.Name.Contains('preview') } |
         ForEach-Object { dotnet nuget push $_ --source https://api.nuget.org/v3/index.json --skip-duplicate --api-key ${{secrets.NUGET_API_KEY}} }
       shell: pwsh
