@@ -91,7 +91,7 @@ jobs:
         name: 'ubuntu-latest'
     - name: 'Dotnet NuGet Push'
       run: |
-        Get-ChildItem .\ubuntu-latest -Filter *.nupkg |
+        Get-ChildItem .\distr -Filter *.nupkg |
         Where-Object { !$_.Name.Contains('preview') } |
         ForEach-Object { dotnet nuget push $_ --source https://api.nuget.org/v3/index.json --skip-duplicate --api-key ${{secrets.NUGET_API_KEY}} }
       shell: pwsh
