@@ -16,7 +16,7 @@ public class CommandResult<TResult> : CommandResult, ICommandResult<TResult>
     /// <param name="status">Статус завершения команды.</param>
     /// <param name="data">Объект данных.</param>
     /// <param name="errorMessages">Массив сообщений об ошибках.</param>
-    public CommandResult(CommandStatus status, TResult data, string[]? errorMessages = null) : base (status, errorMessages)
+    public CommandResult(CommandStatus status, TResult? data, string[]? errorMessages = null) : base (status, errorMessages)
     {
         Data = data;
     }
