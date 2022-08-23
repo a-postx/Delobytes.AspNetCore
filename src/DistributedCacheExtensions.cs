@@ -23,10 +23,10 @@ public static class DistributedCacheExtensions
     /// <returns>The value of type <typeparamref name="T" /> or <c>null</c> if the key was not found.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="cache"/> or <paramref name="key"/> is
     /// <c>null</c>.</exception>
-    public static async Task<T> GetAsJsonAsync<T>(
+    public static async Task<T?> GetAsJsonAsync<T>(
         this IDistributedCache cache,
         string key,
-        JsonSerializerOptions jsonSerializerOptions = null,
+        JsonSerializerOptions? jsonSerializerOptions = null,
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(cache);
@@ -54,8 +54,8 @@ public static class DistributedCacheExtensions
         this IDistributedCache cache,
         string key,
         T value,
-        DistributedCacheEntryOptions options = null,
-        JsonSerializerOptions jsonSerializerOptions = null,
+        DistributedCacheEntryOptions? options = null,
+        JsonSerializerOptions? jsonSerializerOptions = null,
         CancellationToken cancellationToken = default)
         where T : class
     {
@@ -66,7 +66,7 @@ public static class DistributedCacheExtensions
         return cache.SetAsync(key, bytes, options, cancellationToken);
     }
 
-    private static T Deserialize<T>(byte[] bytes, JsonSerializerOptions jsonSerializerOptions)
+    private static T? Deserialize<T>(byte[] bytes, JsonSerializerOptions? jsonSerializerOptions)
     {
         Utf8JsonReader utf8JsonReader = new Utf8JsonReader(bytes);
         return JsonSerializer.Deserialize<T>(ref utf8JsonReader, jsonSerializerOptions);

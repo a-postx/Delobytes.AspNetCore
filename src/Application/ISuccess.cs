@@ -8,5 +8,5 @@ public interface ISuccess
     /// <summary>
     /// Версия агрегата (временная метка или еТаг).
     /// </summary>
-    public string AggregateVersion { get; }
+    public string? AggregateVersion { get; }
 }

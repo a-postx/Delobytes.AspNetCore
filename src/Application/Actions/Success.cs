@@ -18,7 +18,7 @@ public class Success : ResponseObject, ISuccess
     /// </summary>
     /// <param name="correlationId">Идентификатор корреляции.</param>
     /// <param name="aggregateVersion">Версия агрегата.</param>
-    public Success(Guid correlationId, string aggregateVersion = null) : base(correlationId)
+    public Success(Guid correlationId, string? aggregateVersion = null) : base(correlationId)
     {
         AggregateVersion = aggregateVersion;
     }
@@ -30,5 +30,5 @@ public class Success : ResponseObject, ISuccess
     /// <summary>
     /// Версия агрегата (временная метка или еТаг).
     /// </summary>
-    public string AggregateVersion { get; protected set; }
+    public string? AggregateVersion { get; protected set; }
 }

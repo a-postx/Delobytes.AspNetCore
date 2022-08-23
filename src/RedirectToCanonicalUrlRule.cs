@@ -71,7 +71,7 @@ public class RedirectToCanonicalUrlRule : IRule
 
         if (HttpMethods.IsGet(context.HttpContext.Request.Method))
         {
-            if (!TryGetCanonicalUrl(context, out Uri canonicalUrl))
+            if (!TryGetCanonicalUrl(context, out Uri? canonicalUrl))
             {
                 HandleNonCanonicalRequest(context, canonicalUrl);
             }
@@ -84,20 +84,21 @@ public class RedirectToCanonicalUrlRule : IRule
     /// <param name="context">The <see cref="RewriteContext" />.</param>
     /// <param name="canonicalUrl">The canonical URL.</param>
     /// <returns><c>true</c> if the URL is canonical, otherwise <c>false</c>.</returns>
-    protected virtual bool TryGetCanonicalUrl(RewriteContext context, out Uri canonicalUrl)
+    protected virtual bool TryGetCanonicalUrl(RewriteContext context, out Uri? canonicalUrl)
     {
         ArgumentNullException.ThrowIfNull(context);
 
-        var isCanonical = true;
+        bool isCanonical = true;
 
-        var request = context.HttpContext.Request;
-        var hasPath = request.Path.HasValue && (request.Path.Value.Length > 1);
+        HttpRequest request = context.HttpContext.Request;
+        bool hasPath = request.Path.HasValue && (request.Path.Value.Length > 1);
+        string pathValue = request.Path.Value ?? string.Empty;
 
         // If we are not dealing with the home page. Note, the home page is a special case and it doesn't matter
         // if there is a trailing slash or not. Both will be treated as the same by search engines.
         if (hasPath)
         {
-            var hasTrailingSlash = request.Path.Value[^1] == SlashCharacter;
+            var hasTrailingSlash = pathValue[^1] == SlashCharacter;
 
             if (AppendTrailingSlash)
             {
@@ -113,7 +114,7 @@ public class RedirectToCanonicalUrlRule : IRule
                 // Trim a trailing slash from the end of the URL.
                 if (hasTrailingSlash)
                 {
-                    request.Path = new PathString(request.Path.Value.TrimEnd(SlashCharacter));
+                    request.Path = new PathString(pathValue.TrimEnd(SlashCharacter));
                     isCanonical = false;
                 }
             }
@@ -123,12 +124,12 @@ public class RedirectToCanonicalUrlRule : IRule
         {
             if (LowercaseUrls && !HasAttribute<NoTrailingSlashAttribute>(context))
             {
-                foreach (char character in request.Path.Value)
+                foreach (char character in pathValue)
                 {
                     if (char.IsUpper(character))
                     {
 #pragma warning disable CA1308 // Normalize strings to uppercase
-                        request.Path = new PathString(request.Path.Value.ToLowerInvariant());
+                        request.Path = new PathString(pathValue.ToLowerInvariant());
 #pragma warning restore CA1308 // Normalize strings to uppercase
                         isCanonical = false;
                         break;
@@ -137,12 +138,14 @@ public class RedirectToCanonicalUrlRule : IRule
 
                 if (request.QueryString.HasValue && !HasAttribute<NoLowercaseQueryStringAttribute>(context))
                 {
-                    foreach (char character in request.QueryString.Value)
+                    string queryValue = request.QueryString.Value ?? string.Empty;
+
+                    foreach (char character in queryValue)
                     {
                         if (char.IsUpper(character))
                         {
 #pragma warning disable CA1308 // Normalize strings to uppercase
-                            request.QueryString = new QueryString(request.QueryString.Value.ToLowerInvariant());
+                            request.QueryString = new QueryString(queryValue.ToLowerInvariant());
 #pragma warning restore CA1308 // Normalize strings to uppercase
                             isCanonical = false;
                             break;
@@ -169,7 +172,7 @@ public class RedirectToCanonicalUrlRule : IRule
     /// </summary>
     /// <param name="context">The <see cref="RewriteContext" />.</param>
     /// <param name="canonicalUrl">The canonical URL.</param>
-    protected virtual void HandleNonCanonicalRequest(RewriteContext context, Uri canonicalUrl)
+    protected virtual void HandleNonCanonicalRequest(RewriteContext context, Uri? canonicalUrl)
     {
         ArgumentNullException.ThrowIfNull(context);
         ArgumentNullException.ThrowIfNull(canonicalUrl);
@@ -187,12 +190,11 @@ public class RedirectToCanonicalUrlRule : IRule
     /// <typeparam name="T">The type of the attribute.</typeparam>
     /// <param name="context">The <see cref="RewriteContext" />.</param>
     /// <returns><c>true</c> if a <typeparamref name="T"/> attribute is specified, otherwise <c>false</c>.</returns>
-    protected virtual bool HasAttribute<T>(RewriteContext context)
-        where T : class
+    protected virtual bool HasAttribute<T>(RewriteContext context) where T : class
     {
         ArgumentNullException.ThrowIfNull(context);
 
-        Endpoint endpoint = context.HttpContext.GetEndpoint();
-        return endpoint.Metadata.GetMetadata<T>() is object;
+        Endpoint? endpoint = context.HttpContext.GetEndpoint();
+        return endpoint?.Metadata.GetMetadata<T>() is object;
     }
 }

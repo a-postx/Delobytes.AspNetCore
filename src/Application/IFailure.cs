@@ -12,6 +12,6 @@ public interface IFailure
     /// <summary>
     /// Массив сообщений об ошибках.
     /// </summary>
-    string[] ErrorMessages { get; }
+    string[]? ErrorMessages { get; }
     
 }

@@ -12,9 +12,9 @@ public interface ICommandResult<TResult>
     /// <summary>
     /// Объект данных.
     /// </summary>
-    public TResult Data { get; }
+    public TResult? Data { get; }
     /// <summary>
     /// Массив сообщений об ошибках.
     /// </summary>
-    public string[] ErrorMessages { get; }
+    public string[]? ErrorMessages { get; }
 }

@@ -23,20 +23,21 @@ internal class HttpExceptionMiddleware : IMiddleware
         {
             await this.next.Invoke(context).ConfigureAwait(false);
         }
-        catch (HttpException httpException)
+        catch (HttpException ex)
         {
             ILoggerFactory factory = context.RequestServices.GetRequiredService<ILoggerFactory>();
             ILogger<HttpExceptionMiddleware> logger = factory.CreateLogger<HttpExceptionMiddleware>();
-            logger.LogInformation(
-                httpException,
-                "Executing HttpExceptionMiddleware, setting HTTP status code {0}.",
-                httpException.StatusCode);
+            logger.LogInformation(ex, "Executing HttpExceptionMiddleware, setting HTTP status code {0}.", ex.StatusCode);
+            context.Response.StatusCode = ex.StatusCode;
 
-            context.Response.StatusCode = httpException.StatusCode;
             if (options.IncludeReasonPhraseInResponse)
             {
-                var responseFeature = context.Features.Get<IHttpResponseFeature>();
-                responseFeature.ReasonPhrase = httpException.Message;
+                IHttpResponseFeature? responseFeature = context.Features.Get<IHttpResponseFeature>();
+
+                if (responseFeature is not null)
+                {
+                    responseFeature.ReasonPhrase = ex.Message;
+                }
             }
         }
     }

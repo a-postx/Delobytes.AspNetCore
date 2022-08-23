@@ -18,7 +18,7 @@ public class Failure : ResponseObject, IFailure
     /// </summary>
     /// <param name="correlationId">Идентификатор корреляции.</param>
     /// <param name="errorMessages">Массив сообщений об ошибках.</param>
-    public Failure(Guid correlationId, string[] errorMessages = null) : base(correlationId)
+    public Failure(Guid correlationId, string[]? errorMessages = null) : base(correlationId)
     {
         ErrorMessages = errorMessages;
     }
@@ -30,5 +30,5 @@ public class Failure : ResponseObject, IFailure
     /// <summary>
     /// Массив сообщений об ошибках.
     /// </summary>
-    public string[] ErrorMessages { get; protected set; }
+    public string[]? ErrorMessages { get; protected set; }
 }

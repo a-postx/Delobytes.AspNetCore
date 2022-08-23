@@ -32,9 +32,9 @@ public static class QueryableExtensions
 
         Type entityType = typeof(TSource);
 
-        PropertyInfo propertyInfo = entityType.GetProperty(propertyName);
+        PropertyInfo? propertyInfo = entityType.GetProperty(propertyName);
 
-        if (null == propertyInfo)
+        if (propertyInfo == null)
         {
             throw new InvalidOperationException($"{propertyName} does not exists");
         }
@@ -46,8 +46,14 @@ public static class QueryableExtensions
         MethodInfo method = desc ? OrderByDescendingMethod : OrderByMethod;
         MethodInfo genericMethod = method.MakeGenericMethod(entityType, propertyInfo.PropertyType);
 
-        IOrderedQueryable<TSource> newQuery = (IOrderedQueryable<TSource>)genericMethod
-                .Invoke(genericMethod, new object[] { query, selector });
+        object? rawMethod = genericMethod.Invoke(genericMethod, new object[] { query, selector });
+
+        if (rawMethod == null)
+        {
+            throw new InvalidOperationException("Error invoking generic method");
+        }
+
+        IOrderedQueryable<TSource> newQuery = (IOrderedQueryable<TSource>)rawMethod;
 
         return newQuery;
     }

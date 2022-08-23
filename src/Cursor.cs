@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -17,7 +18,7 @@ public static class Cursor
     /// <typeparam name="T">The type of the cursor value.</typeparam>
     /// <param name="cursor">The cursor.</param>
     /// <returns>The cursor value.</returns>
-    public static T FromCursor<T>(string cursor)
+    public static T? FromCursor<T>(string cursor)
     {
         if (string.IsNullOrEmpty(cursor))
         {
@@ -34,7 +35,7 @@ public static class Cursor
             return default;
         }
 
-        var type = typeof(T);
+        Type type = typeof(T);
         type = Nullable.GetUnderlyingType(type) ?? type;
 
         if (type == typeof(DateTime))
@@ -63,20 +64,23 @@ public static class Cursor
     /// <param name="enumerable">The enumerable.</param>
     /// <param name="getCursorProperty">The get cursor property.</param>
     /// <returns>The first and last cursor in the collection.</returns>
-    /// <exception cref="ArgumentNullException"><paramref name="getCursorProperty"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="enumerable"/> or 
+    /// <paramref name="getCursorProperty"/> is <c>null</c>.</exception>
+    /// <exception cref="InvalidOperationException"><paramref name="enumerable"/> is empty.</exception>
     public static (string firstCursor, string lastCursor) GetFirstAndLastCursor<TItem, TCursor>(
         IEnumerable<TItem> enumerable,
         Func<TItem, TCursor> getCursorProperty)
     {
+        ArgumentNullException.ThrowIfNull(enumerable);
         ArgumentNullException.ThrowIfNull(getCursorProperty);
 
-        if (enumerable is null || !enumerable.Any())
+        if (!enumerable.Any())
         {
-            return (null, null);
+            throw new InvalidOperationException("Enumerable doesn't contain any element");
         }
 
-        var firstCursor = ToCursor(getCursorProperty(enumerable.First()));
-        var lastCursor = ToCursor(getCursorProperty(enumerable.Last()));
+        string firstCursor = ToCursor(getCursorProperty(enumerable.First()));
+        string lastCursor = ToCursor(getCursorProperty(enumerable.Last()));
 
         return (firstCursor, lastCursor);
     }
@@ -88,6 +92,7 @@ public static class Cursor
     /// <param name="value">The value.</param>
     /// <returns>The cursor.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="value"/> is <c>null</c>.</exception>
+    /// <exception cref="InvalidOperationException"><paramref name="value"/> is not converible to string.</exception>
     public static string ToCursor<T>(T value)
     {
         ArgumentNullException.ThrowIfNull(value);
@@ -107,7 +112,16 @@ public static class Cursor
             return Base64Encode(dateOnly.ToString("o", CultureInfo.InvariantCulture));
         }
 
-        return Base64Encode(value.ToString());
+        string? rawValue = value.ToString();
+
+        if (rawValue is not null)
+        {
+            return Base64Encode(rawValue);
+        }
+        else
+        {
+            throw new InvalidOperationException("Value is not convertable to string");
+        }
     }
 
     private static string Base64Decode(string value) => Encoding.UTF8.GetString(Convert.FromBase64String(value));

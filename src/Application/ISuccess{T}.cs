@@ -9,5 +9,5 @@ public interface ISuccess<TPayload>
     /// <summary>
     /// Объект данных.
     /// </summary>
-    TPayload Data { get; }
+    TPayload? Data { get; }
 }

@@ -17,36 +17,34 @@ public static class ClaimPrincipalExtensions
     /// <returns>The <typeparam name="T"/> value or <c>default</c> if the key was not found.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="principal"/> or <paramref name="claimName"/> is <c>null</c>.</exception>
     /// <exception cref="InvalidOperationException"><typeparam name="T"/> is not supported.</exception>
-    public static T GetClaimValue<T>(this ClaimsPrincipal principal, string claimName)
+    public static T? GetClaimValue<T>(this ClaimsPrincipal principal, string claimName)
     {
         ArgumentNullException.ThrowIfNull(principal);
         ArgumentNullException.ThrowIfNull(claimName);
 
-        string claimValue = principal.FindFirst(claimName)?.Value;
+        string? claimValue = principal.FindFirst(claimName)?.Value;
 
-        if (claimValue != null)
+        if (claimValue is null)
         {
-            if (typeof(T) == typeof(string))
-            {
-                return (T)Convert.ChangeType(claimValue, typeof(T));
-            }
-            else if (typeof(T) == typeof(int) || typeof(T) == typeof(long))
-            {
-                return claimValue != null ? (T)Convert.ChangeType(claimValue, typeof(T)) : (T)Convert.ChangeType(0, typeof(T));
-            }
-            else if (typeof(T) == typeof(Guid))
-            {
-                bool parsed = Guid.TryParse(claimValue, out Guid guidClaimValue);
-                return parsed ? (T)Convert.ChangeType(guidClaimValue, typeof(T)) : default;
-            }
-            else
-            {
-                throw new InvalidOperationException("Not supported type provided.");
-            }
+            return default;
+        }
+
+        if (typeof(T) == typeof(string))
+        {
+            return (T)Convert.ChangeType(claimValue, typeof(T));
+        }
+        else if (typeof(T) == typeof(int) || typeof(T) == typeof(long))
+        {
+            return (T)Convert.ChangeType(claimValue, typeof(T));
+        }
+        else if (typeof(T) == typeof(Guid))
+        {
+            bool parsed = Guid.TryParse(claimValue, out Guid guidClaimValue);
+            return parsed ? (T)Convert.ChangeType(guidClaimValue, typeof(T)) : default;
         }
         else
         {
-            return default;
+            throw new InvalidOperationException("Not supported type provided.");
         }
     }
 }

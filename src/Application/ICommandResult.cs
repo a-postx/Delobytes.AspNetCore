@@ -12,5 +12,5 @@ public interface ICommandResult
     /// <summary>
     /// Массив сообщений об ошибках.
     /// </summary>
-    public string[] ErrorMessages { get; }
+    public string[]? ErrorMessages { get; }
 }

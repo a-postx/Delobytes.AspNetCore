@@ -26,7 +26,7 @@ public static class ApplicationBuilderExtensions
     /// <param name="application">Application builder.</param>
     /// <param name="configureOptions">Middleware options.</param>
     /// <returns>The same application builder.</returns>
-    public static IApplicationBuilder UseHttpException(this IApplicationBuilder application, Action<HttpExceptionMiddlewareOptions> configureOptions)
+    public static IApplicationBuilder UseHttpException(this IApplicationBuilder application, Action<HttpExceptionMiddlewareOptions>? configureOptions)
     {
         ArgumentNullException.ThrowIfNull(application);
 
@@ -41,7 +41,7 @@ public static class ApplicationBuilderExtensions
     /// </summary>
     /// <param name="application"></param>
     /// <returns></returns>
-    public static IApplicationBuilder UseHttpExceptionHandling(this IApplicationBuilder application, Action<HttpExceptionHandlerOptions> configureOptions = null)
+    public static IApplicationBuilder UseHttpExceptionHandling(this IApplicationBuilder application, Action<HttpExceptionHandlerOptions>? configureOptions = null)
     {
         ArgumentNullException.ThrowIfNull(application);
 

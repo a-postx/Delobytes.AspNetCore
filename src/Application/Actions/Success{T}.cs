@@ -20,7 +20,7 @@ public class Success<TPayload> : Success, ISuccess<TPayload>
     /// <param name="correlationId">Идентификатор корреляции.</param>
     /// <param name="aggregateVersion">Версия агрегата.</param>
     /// <param name="data">Объект данных.</param>
-    public Success(Guid correlationId, string aggregateVersion, TPayload data) : base(correlationId, aggregateVersion)
+    public Success(Guid correlationId, string? aggregateVersion, TPayload? data) : base(correlationId, aggregateVersion)
     {
         Data = data;
     }
@@ -28,5 +28,5 @@ public class Success<TPayload> : Success, ISuccess<TPayload>
     /// <summary>
     /// Объект данных.
     /// </summary>
-    public TPayload Data { get; protected set; }
+    public TPayload? Data { get; protected set; }
 }

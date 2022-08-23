@@ -15,7 +15,7 @@ public class CommandResult : ICommandResult
     /// </summary>
     /// <param name="status">Статус завершения команды.</param>
     /// <param name="errorMessages">Массив сообщений об ошибках.</param>
-    public CommandResult(CommandStatus status, string[] errorMessages = null)
+    public CommandResult(CommandStatus status, string[]? errorMessages = null)
     {
         Status = status;
         ErrorMessages = errorMessages;
@@ -28,5 +28,5 @@ public class CommandResult : ICommandResult
     /// <summary>
     /// Массив сообщений об ошибках.
     /// </summary>
-    public string[] ErrorMessages { get; protected set; }
+    public string[]? ErrorMessages { get; protected set; }
 }
