@@ -73,7 +73,7 @@ jobs:
     - name: 'Download Artefact'
       uses: actions/download-artifact@v3.0.0
       with:
-        name: 'windows-latest'
+        name: 'ubuntu-latest'
     - name: 'Dotnet NuGet Add Source'
       run: dotnet nuget add source https://nuget.pkg.github.com/Delobytes.AspNetCore/index.json --name GitHub --username a-postx --password ${{secrets.GITHUB_TOKEN}}
       shell: pwsh
@@ -88,10 +88,10 @@ jobs:
     - name: 'Download Artefact'
       uses: actions/download-artifact@v3.0.0
       with:
-        name: 'windows-latest'
+        name: 'ubuntu-latest'
     - name: 'Dotnet NuGet Push'
       run: |
-        Get-ChildItem .\windows-latest -Filter *.nupkg |
+        Get-ChildItem .\ubuntu-latest -Filter *.nupkg |
         Where-Object { !$_.Name.Contains('preview') } |
         ForEach-Object { dotnet nuget push $_ --source https://api.nuget.org/v3/index.json --skip-duplicate --api-key ${{secrets.NUGET_API_KEY}} }
       shell: pwsh
