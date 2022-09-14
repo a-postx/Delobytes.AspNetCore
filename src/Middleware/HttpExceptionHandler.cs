@@ -14,13 +14,17 @@ public class HttpExceptionHandler
 {
     private readonly RequestDelegate _next;
     private readonly HttpExceptionHandlerOptions _options;
+    private readonly ILogger<HttpExceptionHandler> _logger;
 
     private static JsonSerializerOptions _defaultJsonOptions = new JsonSerializerOptions();
 
-    public HttpExceptionHandler(RequestDelegate next, HttpExceptionHandlerOptions options)
+    public HttpExceptionHandler(RequestDelegate next,
+        HttpExceptionHandlerOptions options,
+        ILogger<HttpExceptionHandler> logger)
     {
         _next = next ?? throw new ArgumentNullException(nameof(next));
         _options = options ?? throw new ArgumentNullException(nameof(options));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public async Task InvokeAsync(HttpContext context, ILogger<HttpExceptionHandler> logger)
@@ -29,12 +33,10 @@ public class HttpExceptionHandler
         {
             await _next(context);
         }
-        catch (OperationCanceledException ex)
+        catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested)
         {
-            if (!context.RequestAborted.IsCancellationRequested)
-            {
-                await WriteProblemDetails(context, ex);
-            }
+            context.Response.StatusCode = _options.StatusCode;
+            _logger.LogInformation("Client cancelled the request.");
         }
         catch (Exception ex)
         {

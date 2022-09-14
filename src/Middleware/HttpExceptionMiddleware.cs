@@ -6,22 +6,27 @@ using Microsoft.Extensions.Logging;
 
 namespace Delobytes.AspNetCore.Middleware;
 
-internal class HttpExceptionMiddleware : IMiddleware
+public class HttpExceptionMiddleware
 {
-    private readonly RequestDelegate next;
-    private readonly HttpExceptionMiddlewareOptions options;
+    private readonly RequestDelegate _next;
+    private readonly HttpExceptionMiddlewareOptions _options;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HttpExceptionMiddleware"/> class.
+    /// </summary>
+    /// <param name="next">The next middleware.</param>
+    /// <param name="options">The options.</param>
     public HttpExceptionMiddleware(RequestDelegate next, HttpExceptionMiddlewareOptions options)
     {
-        this.next = next;
-        this.options = options;
+        _next = next;
+        _options = options;
     }
 
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public async Task InvokeAsync(HttpContext context)
     {
         try
         {
-            await this.next.Invoke(context).ConfigureAwait(false);
+            await _next.Invoke(context).ConfigureAwait(false);
         }
         catch (HttpException ex)
         {
@@ -30,7 +35,7 @@ internal class HttpExceptionMiddleware : IMiddleware
             logger.LogInformation(ex, "Executing HttpExceptionMiddleware, setting HTTP status code {0}.", ex.StatusCode);
             context.Response.StatusCode = ex.StatusCode;
 
-            if (options.IncludeReasonPhraseInResponse)
+            if (_options.IncludeReasonPhraseInResponse)
             {
                 IHttpResponseFeature? responseFeature = context.Features.Get<IHttpResponseFeature>();
 
