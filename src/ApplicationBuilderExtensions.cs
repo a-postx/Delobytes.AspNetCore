@@ -39,8 +39,9 @@ public static class ApplicationBuilderExtensions
     /// <summary>
     /// Добавляет прослойку перехвата исключений.
     /// </summary>
-    /// <param name="application"></param>
-    /// <returns></returns>
+    /// <param name="application">Строитель приложения.</param>
+    /// <param name="configureOptions">Настройки перехвата исключений.</param>
+    /// <returns>Тот же строитель приложения</returns>
     public static IApplicationBuilder UseHttpExceptionHandling(this IApplicationBuilder application, Action<HttpExceptionHandlerOptions>? configureOptions = null)
     {
         ArgumentNullException.ThrowIfNull(application);

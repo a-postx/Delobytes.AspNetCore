@@ -18,6 +18,13 @@ public class HttpExceptionHandler
 
     private static JsonSerializerOptions _defaultJsonOptions = new JsonSerializerOptions();
 
+    /// <summary>
+    /// Конструктор.
+    /// </summary>
+    /// <param name="next">Следующий делегат.</param>
+    /// <param name="options">Настройи обработки исключения.</param>
+    /// <param name="logger">Логер.</param>
+    /// <exception cref="ArgumentNullException"></exception>
     public HttpExceptionHandler(RequestDelegate next,
         HttpExceptionHandlerOptions options,
         ILogger<HttpExceptionHandler> logger)
@@ -27,6 +34,7 @@ public class HttpExceptionHandler
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
+    /// <inheritdoc/>
     public async Task InvokeAsync(HttpContext context, ILogger<HttpExceptionHandler> logger)
     {
         try

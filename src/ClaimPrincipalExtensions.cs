@@ -10,13 +10,14 @@ public static class ClaimPrincipalExtensions
 {
     /// <summary>
     /// Gets the strongly typed <typeparamref name="T"/> claim value from the specified <paramref name="claimName"/> or returns
-    /// <c>default</c> if the key was not found.
+    /// <c>default</c> if the claim was not found.
     /// </summary>
     /// <typeparam name="T">The type of the claim value.</typeparam>
+    /// <param name="principal">Principal to search the claim from.</param>
     /// <param name="claimName">Name of the claim to search for.</param>
-    /// <returns>The <typeparam name="T"/> value or <c>default</c> if the key was not found.</returns>
+    /// <returns>The T value or <c>default</c> if the key was not found.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="principal"/> or <paramref name="claimName"/> is <c>null</c>.</exception>
-    /// <exception cref="InvalidOperationException"><typeparam name="T"/> is not supported.</exception>
+    /// <exception cref="InvalidOperationException">T is not supported.</exception>
     public static T? GetClaimValue<T>(this ClaimsPrincipal principal, string claimName)
     {
         ArgumentNullException.ThrowIfNull(principal);

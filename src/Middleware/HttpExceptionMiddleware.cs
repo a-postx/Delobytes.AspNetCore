@@ -6,6 +6,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Delobytes.AspNetCore.Middleware;
 
+/// <summary>
+/// Catches exception and log it with additional info.
+/// </summary>
 public class HttpExceptionMiddleware
 {
     private readonly RequestDelegate _next;
@@ -22,6 +25,7 @@ public class HttpExceptionMiddleware
         _options = options;
     }
 
+    /// <inheritdoc/>
     public async Task InvokeAsync(HttpContext context)
     {
         try

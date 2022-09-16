@@ -67,7 +67,7 @@ public static class Cursor
     /// <exception cref="ArgumentNullException"><paramref name="enumerable"/> or 
     /// <paramref name="getCursorProperty"/> is <c>null</c>.</exception>
     /// <exception cref="InvalidOperationException"><paramref name="enumerable"/> is empty.</exception>
-    public static (string firstCursor, string lastCursor) GetFirstAndLastCursor<TItem, TCursor>(
+    public static (string? firstCursor, string? lastCursor) GetFirstAndLastCursor<TItem, TCursor>(
         IEnumerable<TItem> enumerable,
         Func<TItem, TCursor> getCursorProperty)
     {
@@ -76,7 +76,7 @@ public static class Cursor
 
         if (!enumerable.Any())
         {
-            throw new InvalidOperationException("Enumerable doesn't contain any element");
+            return (null, null);
         }
 
         string firstCursor = ToCursor(getCursorProperty(enumerable.First()));

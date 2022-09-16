@@ -5,6 +5,9 @@ using System.Reflection;
 
 namespace Delobytes.AspNetCore;
 
+/// <summary>
+/// <see cref="Queryable"/> extension methods.
+/// </summary>
 public static class QueryableExtensions
 {
     private static readonly MethodInfo OrderByMethod = typeof(Queryable)
