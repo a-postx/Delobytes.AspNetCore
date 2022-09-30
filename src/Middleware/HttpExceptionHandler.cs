@@ -1,9 +1,9 @@
-﻿using System;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace Delobytes.AspNetCore.Middleware;
 
@@ -14,7 +14,6 @@ public class HttpExceptionHandler
 {
     private readonly RequestDelegate _next;
     private readonly HttpExceptionHandlerOptions _options;
-    private readonly ILogger<HttpExceptionHandler> _logger;
 
     private static JsonSerializerOptions _defaultJsonOptions = new JsonSerializerOptions();
 
@@ -23,15 +22,12 @@ public class HttpExceptionHandler
     /// </summary>
     /// <param name="next">Следующий делегат.</param>
     /// <param name="options">Настройи обработки исключения.</param>
-    /// <param name="logger">Логер.</param>
     /// <exception cref="ArgumentNullException"></exception>
     public HttpExceptionHandler(RequestDelegate next,
-        HttpExceptionHandlerOptions options,
-        ILogger<HttpExceptionHandler> logger)
+        HttpExceptionHandlerOptions options)
     {
         _next = next ?? throw new ArgumentNullException(nameof(next));
         _options = options ?? throw new ArgumentNullException(nameof(options));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     /// <inheritdoc/>
@@ -43,21 +39,27 @@ public class HttpExceptionHandler
         }
         catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested)
         {
-            context.Response.StatusCode = _options.StatusCode;
-            _logger.LogInformation("Client cancelled the request.");
+            context.Response.StatusCode = _options.RequestCancelledStatusCode;
+            logger.LogInformation("Client cancelled the request.");
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Unhandled exception.");
+            if (_options.LogException)
+            {
+                logger.LogError(ex, "Unhandled exception.");
+            }
 
-            await WriteProblemDetails(context, ex);
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
+            if (_options.ReturnProblemDetails)
+            {
+                await WriteProblemDetails(context, ex);
+            }
         }
     }
 
     private async Task WriteProblemDetails(HttpContext context, Exception ex)
     {
-        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-
         if (context.Response.Body.CanWrite)
         {
             ProblemDetails problemDetails = new ProblemDetails
