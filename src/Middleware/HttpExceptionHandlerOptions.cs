@@ -30,4 +30,14 @@ public class HttpExceptionHandlerOptions
     /// Возвращать в теле ответа объект с деталями проблемы.
     /// </summary>
     public bool ReturnProblemDetails { get; set; } = true;
+
+    /// <summary>
+    /// Заменять код ответа на единый (при обработке исключения).
+    /// </summary>
+    public bool ReplaceStatusCode { get; set; } = true;
+
+    /// <summary>
+    /// Код ответа при замене на единый.
+    /// </summary>
+    public int ExceptionStatusCode { get; set; } = 500;
 }

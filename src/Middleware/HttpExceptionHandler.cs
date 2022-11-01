@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Diagnostics;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -49,11 +51,31 @@ public class HttpExceptionHandler
                 logger.LogError(ex, "Unhandled exception.");
             }
 
-            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            if (context.Response.HasStarted)
+            {
+                logger.LogError("Response already started");
+                throw;
+            }
 
-            if (_options.ReturnProblemDetails)
+            if (_options.ReplaceStatusCode)
+            {
+                context.Response.StatusCode = _options.ExceptionStatusCode;
+            }
+
+            if (_options.ReturnProblemDetails && context.Request.AcceptsJson())
             {
                 await WriteProblemDetails(context, ex);
+            }
+            else
+            {
+                context.Response.ContentType = "text/plain";
+                string? message = ReasonPhrases.GetReasonPhrase(context.Response.StatusCode) switch
+                {
+                    { Length: > 0 } reasonPhrase => reasonPhrase,
+                    _ => "An error occurred"
+                };
+                await context.Response.WriteAsync(message + "\r\n");
+                await context.Response.WriteAsync($"Request ID: { Activity.Current?.Id ?? context.TraceIdentifier }");
             }
         }
     }
@@ -64,7 +86,7 @@ public class HttpExceptionHandler
         {
             ProblemDetails problemDetails = new ProblemDetails
             {
-                Status = StatusCodes.Status500InternalServerError,
+                Status = _options.ExceptionStatusCode,
                 Title = ex.Message,
                 Type = null,
                 Detail = _options.IncludeStackTraceInResponse ? ex.StackTrace : null,
@@ -76,3 +98,6 @@ public class HttpExceptionHandler
         }
     }
 }
+
+
+        
