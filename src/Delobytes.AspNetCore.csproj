@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Authors>Alexey Yakubin, Muhammad Rehan Saeed</Authors>
     <Company>Delobytes</Company>
     <Description>Middlewares, MVC filters, extension methods and helper code for ASP.NET Core projects.</Description>
 	<PackageProjectUrl>https://github.com/a-postx/Delobytes.AspNetCore</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>6.1.0-beta1</Version>
+    <Version>7.0.0-beta1</Version>
     <RepositoryUrl>https://github.com/a-postx/Delobytes.AspNetCore.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 	<Nullable>enable</Nullable>

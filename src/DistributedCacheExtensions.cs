@@ -32,7 +32,7 @@ public static class DistributedCacheExtensions
         ArgumentNullException.ThrowIfNull(cache);
         ArgumentNullException.ThrowIfNull(key);
 
-        byte[] bytes = await cache.GetAsync(key, cancellationToken).ConfigureAwait(false);
+        byte[]? bytes = await cache.GetAsync(key, cancellationToken).ConfigureAwait(false);
         return Deserialize<T>(bytes, jsonSerializerOptions);
     }
 
@@ -62,12 +62,22 @@ public static class DistributedCacheExtensions
         ArgumentNullException.ThrowIfNull(cache);
         ArgumentNullException.ThrowIfNull(key);
 
+        if (options == null)
+        {
+            options = new DistributedCacheEntryOptions();
+        }
+
         byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(value, jsonSerializerOptions);
         return cache.SetAsync(key, bytes, options, cancellationToken);
     }
 
-    private static T? Deserialize<T>(byte[] bytes, JsonSerializerOptions? jsonSerializerOptions)
+    private static T? Deserialize<T>(byte[]? bytes, JsonSerializerOptions? jsonSerializerOptions)
     {
+        if (bytes is null)
+        {
+            return default;
+        }
+
         Utf8JsonReader utf8JsonReader = new Utf8JsonReader(bytes);
         return JsonSerializer.Deserialize<T>(ref utf8JsonReader, jsonSerializerOptions);
     }
